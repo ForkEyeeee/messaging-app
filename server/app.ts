@@ -1,7 +1,7 @@
-require("dotenv").config();
-import { Request, Response, NextFunction } from "express";
+import dotenv from "dotenv";
+dotenv.config();
+import express, { Request, Response, NextFunction } from "express";
 import createError from "http-errors";
-import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
@@ -9,9 +9,10 @@ import compression from "compression";
 import helmet from "helmet";
 import cors from "cors";
 import mongoose from "mongoose";
-import protectedRoutes from "./routes/protectedRoutes";
-import unprotectedRoutes from "./routes/unprotectedRoutes";
-import jwt from "jsonwebtoken";
+import routes from "./routes/routes";
+import secureRoutes from "./routes/secureRoutes";
+import passport from "passport";
+import "./auth/auth";
 
 const app = express();
 
@@ -30,25 +31,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(compression());
 
-function verifyToken(req: Request, res: Response, next: NextFunction) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    return res
-      .status(401)
-      .json({ success: false, message: "Token not provided." });
-  }
-  const token = authHeader.split(" ")[1]; // Expecting 'Bearer TOKEN'
-  try {
-    const decodedToken = jwt.verify(token, process.env.signature as any);
-    (req as any).userData = decodedToken; // Access user details via req.userData in routes after this middleware
-    next(); // Proceed to next middleware or route handler
-  } catch (error) {
-    return res.status(401).json({ success: false, message: "Invalid token." });
-  }
-}
-
-app.use("/api", unprotectedRoutes);
-app.use("/api", verifyToken, protectedRoutes);
+app.use("/api", routes);
+app.use(
+  "/api/user",
+  passport.authenticate("jwt", { session: false }),
+  secureRoutes
+);
 
 // Set up mongoose connection
 mongoose.set("strictQuery", false);
@@ -64,7 +52,7 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
   next(createError(404));
 });
 
-// error handler
+//  error handler
 app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
   // set locals, only providing error in development
   res.locals.message = err.message;

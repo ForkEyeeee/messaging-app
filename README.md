@@ -87,6 +87,7 @@ Visit the application in your browser at `http://localhost:5173/`.
 - [Express](https://expressjs.com/) - Web framework for Node.js.
 - [MongoDB](https://www.mongodb.com/) - NoSQL database.
 - [Mongoose](https://mongoosejs.com/) - Data modeling for MongoDB.
+- [Passport.js](http://www.passportjs.org/) - Authentication middleware for Node.js.
 - [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - JSON Web Token implementation for Node.js.
 - [Supertest](https://www.npmjs.com/package/supertest) - HTTP testing library.
 - [mongodb-memory-server](https://www.npmjs.com/package/mongodb-memory-server) - In-memory MongoDB server.
