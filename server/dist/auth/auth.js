@@ -15,6 +15,7 @@ passport_1.default.use("signup", new passport_local_1.Strategy({
     passwordField: "password",
 }, async (username, password, done) => {
     try {
+        console.log(username);
         const user = await user_1.default.create({ username, password });
         return done(null, user);
     }

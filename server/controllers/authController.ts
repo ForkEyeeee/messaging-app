@@ -6,15 +6,34 @@ import asyncHandler from "express-async-handler";
 import dotenv from "dotenv";
 dotenv.config();
 
+type User = {
+  username: string;
+  password: string;
+  _id: string;
+  __v: number;
+};
+
+type Info = {
+  message: string;
+};
+
 export const signUpPost = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    passport.authenticate("signup", { session: false }),
-      async (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate(
+      "signup",
+      { session: false },
+      (err: object, user: User) => {
+        if (err || !user) {
+          return res.status(400).json({
+            message: `Username, ${req.body.username}, already exists.`,
+          });
+        }
         res.json({
           message: "Signup successful",
-          user: req.user,
+          user: user,
         });
-      };
+      }
+    )(req, res, next);
   }
 );
 
@@ -22,21 +41,10 @@ export const logInPost = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate(
       "login",
-      async (
-        err: Error,
-        user: {
-          _id: Types.ObjectId;
-          username: string;
-          password: string;
-          __v: number;
-        },
-        info: {
-          message: string;
-        }
-      ) => {
+      async (err: object, user: User, info: Info) => {
         try {
           if (err || !user) {
-            const error = new Error("An error occurred.");
+            const error = new Error("An error occurred."); //wrong password or user
             return next(error);
           }
 
@@ -47,11 +55,13 @@ export const logInPost = asyncHandler(
             const token = jwt.sign(
               { user: body },
               process.env.signature as any,
-              { expiresIn: "10s" }
+              {
+                expiresIn: "10s",
+              }
             );
             const Message = info.message;
-            return res.json({ Message, token }); //send token to client on login and set it in localstorage.
-            //send it in header whenever user tries to go to a secure route and add it to App.ts with passport strategy
+            console.log(info);
+            return res.json({ Message, token });
           });
         } catch (error) {
           return next(error);
