@@ -9,17 +9,23 @@ const passport_jwt_1 = require("passport-jwt");
 const user_1 = __importDefault(require("../models/user"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-// For the signup strategy
 passport_1.default.use("signup", new passport_local_1.Strategy({
     usernameField: "username",
     passwordField: "password",
 }, async (username, password, done) => {
     try {
-        console.log(username);
+        console.log("Attempting to create user:", username);
+        const existingUser = await user_1.default.findOne({ username });
+        if (existingUser) {
+            console.log("User already exists:", username);
+            return done(null, false, { message: "Username already taken" });
+        }
         const user = await user_1.default.create({ username, password });
+        console.log("User created successfully:", user);
         return done(null, user);
     }
     catch (error) {
+        console.error("Error during user creation:", error);
         done(error);
     }
 }));
@@ -55,3 +61,4 @@ passport_1.default.use(new passport_jwt_1.Strategy({
         done(error);
     }
 }));
+exports.default = passport_1.default;

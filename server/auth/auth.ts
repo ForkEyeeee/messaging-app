@@ -5,7 +5,6 @@ import User from "../models/user";
 import dotenv from "dotenv";
 dotenv.config();
 
-// For the signup strategy
 passport.use(
   "signup",
   new LocalStrategy(
@@ -15,10 +14,17 @@ passport.use(
     },
     async (username, password, done) => {
       try {
-        console.log(username);
+        console.log("Attempting to create user:", username);
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+          console.log("User already exists:", username);
+          return done(null, false, { message: "Username already taken" });
+        }
         const user = await User.create({ username, password });
+        console.log("User created successfully:", user);
         return done(null, user);
       } catch (error) {
+        console.error("Error during user creation:", error);
         done(error);
       }
     }
@@ -69,3 +75,5 @@ passport.use(
     }
   )
 );
+
+export default passport;
