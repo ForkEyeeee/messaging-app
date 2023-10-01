@@ -22,10 +22,12 @@ export const signUpPost = asyncHandler(
     passport.authenticate(
       "signup",
       { session: false },
-      (err: object, user: User) => {
+      (err: Error, user: User, info: Info) => {
         if (err || !user) {
+          // Return a 400 status with a custom error message
+          const message = info ? info.message : `An error occurred.`;
           return res.status(400).json({
-            message: `Username, ${req.body.username}, already exists.`,
+            message,
           });
         }
         res.json({
@@ -44,8 +46,8 @@ export const logInPost = asyncHandler(
       async (err: object, user: User, info: Info) => {
         try {
           if (err || !user) {
-            const error = new Error("An error occurred."); //wrong password or user
-            return next(error);
+            console.log(err);
+            return res.status(400).json({ message: "Invalid credentials" });
           }
 
           req.login(user, { session: false }, async error => {
@@ -59,9 +61,9 @@ export const logInPost = asyncHandler(
                 expiresIn: "10s",
               }
             );
-            const Message = info.message;
+            const message = info.message;
             console.log(info);
-            return res.json({ Message, token });
+            return res.json({ message, token });
           });
         } catch (error) {
           return next(error);

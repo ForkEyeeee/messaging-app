@@ -10,10 +10,12 @@ const express_async_handler_1 = __importDefault(require("express-async-handler")
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 exports.signUpPost = (0, express_async_handler_1.default)(async (req, res, next) => {
-    passport_1.default.authenticate("signup", { session: false }, (err, user) => {
+    passport_1.default.authenticate("signup", { session: false }, (err, user, info) => {
         if (err || !user) {
+            // Return a 400 status with a custom error message
+            const message = info ? info.message : `An error occurred.`;
             return res.status(400).json({
-                message: `Username, ${req.body.username}, already exists.`,
+                message,
             });
         }
         res.json({
@@ -26,8 +28,8 @@ exports.logInPost = (0, express_async_handler_1.default)(async (req, res, next) 
     passport_1.default.authenticate("login", async (err, user, info) => {
         try {
             if (err || !user) {
-                const error = new Error("An error occurred."); //wrong password or user
-                return next(error);
+                console.log(err);
+                return res.status(400).json({ message: "Invalid credentials" });
             }
             req.login(user, { session: false }, async (error) => {
                 if (error)
@@ -37,9 +39,9 @@ exports.logInPost = (0, express_async_handler_1.default)(async (req, res, next) 
                 const token = jsonwebtoken_1.default.sign({ user: body }, process.env.signature, {
                     expiresIn: "10s",
                 });
-                const Message = info.message;
+                const message = info.message;
                 console.log(info);
-                return res.json({ Message, token });
+                return res.json({ message, token });
             });
         }
         catch (error) {
