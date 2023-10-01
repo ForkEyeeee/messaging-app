@@ -8,8 +8,8 @@ export interface IUser extends Document {
 }
 
 const UserSchema = new Schema({
-  username: { type: String, required: true },
-  password: { type: String, required: true },
+  username: { type: String, required: true, maxlength: 50 },
+  password: { type: String, required: true, maxlength: 20 },
 });
 
 UserSchema.pre("save", async function (next) {

@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  },
   "extends": "@tsconfig/vite-react/tsconfig.json",
   "include": ["src/**/*", "tests/*.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]

@@ -29,8 +29,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const UserSchema = new mongoose_1.Schema({
-    username: { type: String, required: true },
-    password: { type: String, required: true },
+    username: { type: String, required: true, maxlength: 50 },
+    password: { type: String, required: true, maxlength: 20 },
 });
 UserSchema.pre("save", async function (next) {
     const hash = await bcrypt_1.default.hash(this.password, 10);
