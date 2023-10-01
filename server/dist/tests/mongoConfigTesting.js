@@ -17,8 +17,8 @@ async function initializeMongoServer() {
         }
         console.log(e);
     });
-    mongoose_1.default.connection.once("open", () => {
-        console.log(`MongoDB successfully connected to ${mongoUri}`);
-    });
+    // mongoose.connection.once("open", () => {
+    //   console.log(`MongoDB successfully connected to ${mongoUri}`);
+    // });
 }
 exports.default = initializeMongoServer;
