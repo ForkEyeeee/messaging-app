@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const homeController_1 = require("../controllers/homeController");
 const router = express_1.default.Router();
 router.get("/home", homeController_1.homeGet);
+// router.get("/home");
 // router.get("/home", (req, res, next) => {
 //   res.json({
 //     message: "You made it to the secure route",

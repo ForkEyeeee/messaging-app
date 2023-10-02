@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
+import User from "../models/user";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -11,7 +12,8 @@ export const homeGet = asyncHandler(
     const usertoken: any = req.headers.authorization;
     const token = usertoken.split(" ");
     const decoded = jwt.verify(token[1], process.env.signature as any);
-    console.log(decoded);
-    res.json({ token: decoded });
+    const users = await User.find({});
+    console.log(users);
+    res.json({ token: decoded, users: users });
   }
 );
