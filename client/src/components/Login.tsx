@@ -20,6 +20,7 @@ import React from "react";
 import axios from "axios";
 import { MouseEvent } from "react";
 const Login = () => {
+  console.log("rendering login");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSubmit = async (e: HTMLFormElement) => {

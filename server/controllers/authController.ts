@@ -52,7 +52,6 @@ export const logInPost = asyncHandler(
 
           req.login(user, { session: false }, async error => {
             if (error) return next(error);
-            console.log(user);
             const body = { _id: user._id, username: user.username };
             const token = jwt.sign(
               { user: body },

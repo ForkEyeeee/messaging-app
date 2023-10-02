@@ -34,7 +34,6 @@ exports.logInPost = (0, express_async_handler_1.default)(async (req, res, next) 
             req.login(user, { session: false }, async (error) => {
                 if (error)
                     return next(error);
-                console.log(user);
                 const body = { _id: user._id, username: user.username };
                 const token = jsonwebtoken_1.default.sign({ user: body }, process.env.signature, {
                     expiresIn: "10s",
