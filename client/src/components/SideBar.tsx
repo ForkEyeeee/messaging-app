@@ -18,7 +18,7 @@ import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import SideBarItem from "./SideBarItem";
+import SideBarItem from "./User";
 interface User {
   messages: [];
   _id: string;
@@ -33,7 +33,6 @@ const SideBar = () => {
   const [users, setUsers] = useState<User[]>();
   // useEffect(() => {
   const getUsers = async () => {
-    console.log("clicked");
     try {
       const token = localStorage.getItem("jwt");
       const yourConfig = {
@@ -49,7 +48,6 @@ const SideBar = () => {
         throw new Error("Error getting users");
       } else {
         setUsers(data.data.users);
-        console.log(data.data.users);
       }
     } catch (error) {
       console.error(error);
@@ -76,7 +74,9 @@ const SideBar = () => {
             <Box>
               {users &&
                 users.map(user => (
-                  <SideBarItem key={user._id}>{user.username}</SideBarItem>
+                  <SideBarItem key={user._id} url={user._id}>
+                    {user.username}
+                  </SideBarItem>
                 ))}
             </Box>
           </DrawerBody>

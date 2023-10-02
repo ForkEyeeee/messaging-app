@@ -57,7 +57,7 @@ export const logInPost = asyncHandler(
               { user: body },
               process.env.signature as any,
               {
-                expiresIn: "30m",
+                expiresIn: "365d",
               }
             );
             const message = info.message;

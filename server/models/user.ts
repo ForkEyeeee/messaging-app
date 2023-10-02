@@ -11,6 +11,10 @@ const UserSchema = new Schema(
   {
     username: { type: String, required: true, maxlength: 50 },
     password: { type: String, required: true, maxlength: 20 },
+    firstname: { type: String, required: false, maxlength: 20 },
+    lastname: { type: String, required: false, maxlength: 20 },
+    about: { type: String, required: false, maxlength: 200 },
+    phone: { type: Number, required: false, maxlength: 20 },
     messages: [{ type: Schema.Types.ObjectId, ref: "messages" }],
   },
   { collection: "users" }

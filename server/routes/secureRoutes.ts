@@ -1,9 +1,11 @@
 import express from "express";
 import { homeGet } from "../controllers/homeController";
-
+import { getUser } from "../controllers/userController";
 const router = express.Router();
 
 router.get("/home", homeGet);
+
+router.get("/user/:userid", getUser);
 
 // router.get("/home");
 

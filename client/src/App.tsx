@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
 import Home from "./components/Home";
+import Profile from "./components/Profile";
 import "./styles.css";
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/user/:userid" element={<Profile />} />
 
           {/* <Route path="*" element={<Navigate to="/" />} /> */}
         </Routes>

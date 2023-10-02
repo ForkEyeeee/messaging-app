@@ -31,6 +31,10 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const UserSchema = new mongoose_1.Schema({
     username: { type: String, required: true, maxlength: 50 },
     password: { type: String, required: true, maxlength: 20 },
+    firstname: { type: String, required: false, maxlength: 20 },
+    lastname: { type: String, required: false, maxlength: 20 },
+    about: { type: String, required: false, maxlength: 200 },
+    phone: { type: Number, required: false, maxlength: 20 },
     messages: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "messages" }],
 }, { collection: "users" });
 UserSchema.pre("save", async function (next) {
