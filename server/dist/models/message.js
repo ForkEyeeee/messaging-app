@@ -22,25 +22,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const UserSchema = new mongoose_1.Schema({
-    username: { type: String, required: true, maxlength: 50 },
-    password: { type: String, required: true, maxlength: 20 },
-    messages: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "messages" }],
-}, { collection: "users" });
-UserSchema.pre("save", async function (next) {
-    const hash = await bcrypt_1.default.hash(this.password, 10);
-    this.password = hash;
-    next();
-});
-UserSchema.methods.isValidPassword = async function (password) {
-    const user = this;
-    return bcrypt_1.default.compare(password, user.password);
-};
-const User = mongoose_1.default.model("User", UserSchema);
+const MessageSchema = new mongoose_1.Schema({
+    content: { type: String, required: true, maxlength: 200 },
+    time: { type: Date, require: true },
+}, { collection: "messages" });
+const User = mongoose_1.default.model("Message", MessageSchema);
 exports.default = User;

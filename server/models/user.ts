@@ -7,10 +7,14 @@ export interface IUser extends Document {
   isValidPassword(password: string): Promise<boolean>;
 }
 
-const UserSchema = new Schema({
-  username: { type: String, required: true, maxlength: 50 },
-  password: { type: String, required: true, maxlength: 20 },
-});
+const UserSchema = new Schema(
+  {
+    username: { type: String, required: true, maxlength: 50 },
+    password: { type: String, required: true, maxlength: 20 },
+    messages: [{ type: Schema.Types.ObjectId, ref: "messages" }],
+  },
+  { collection: "users" }
+);
 
 UserSchema.pre("save", async function (next) {
   const hash = await bcrypt.hash(this.password, 10);

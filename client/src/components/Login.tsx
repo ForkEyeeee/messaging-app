@@ -16,16 +16,16 @@ import {
   Input,
   FormHelperText,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { FormEventHandler } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { MouseEvent } from "react";
+import { FormEvent } from "react";
 
 const Login = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: HTMLFormElement) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
       const formData = new FormData(e.currentTarget);
