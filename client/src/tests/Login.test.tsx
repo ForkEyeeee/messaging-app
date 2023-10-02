@@ -22,5 +22,6 @@ describe("Login", () => {
     expect(button).toHaveAttribute("type", "submit");
     expect(vi.isMockFunction(handleClick)).toBe(true);
     expect(handleClick.mock.calls[0]).toEqual(["hello", 1]);
+    //screen.debug()
   });
 });

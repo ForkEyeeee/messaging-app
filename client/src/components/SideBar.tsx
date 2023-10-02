@@ -59,7 +59,7 @@ const SideBar = () => {
   return (
     <>
       <Box onClick={getUsers}>
-        <HamburgerIcon onClick={onOpen} />
+        <HamburgerIcon onClick={onOpen} data-testid="hamburger-icon" />
       </Box>
 
       <Drawer
@@ -71,7 +71,7 @@ const SideBar = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader borderBottomWidth="1px">Basic Drawer</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">Users</DrawerHeader>
           <DrawerBody>
             <Box>
               {users &&
