@@ -32,7 +32,7 @@ app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
 app.use((0, compression_1.default)());
 app.use("/api", routes_1.default);
-app.use("/api/user", passport_1.default.authenticate("jwt", { session: false }), secureRoutes_1.default);
+app.use("/api", passport_1.default.authenticate("jwt", { session: false }), secureRoutes_1.default);
 // Set up mongoose connection
 mongoose_1.default.set("strictQuery", false);
 const mongoDB = process.env.MONGODB_URI || process.env.dev_db_url;

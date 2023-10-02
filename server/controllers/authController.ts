@@ -57,11 +57,12 @@ export const logInPost = asyncHandler(
               { user: body },
               process.env.signature as any,
               {
-                expiresIn: "10s",
+                expiresIn: "30m",
               }
             );
             const message = info.message;
-            console.log(info);
+            // res.redirect("/home");
+
             return res.json({ message, token });
           });
         } catch (error) {

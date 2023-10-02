@@ -3,6 +3,7 @@ import { Flex, Box } from "@chakra-ui/react";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
+import Home from "./components/Home";
 import "./styles.css";
 
 const App = () => {
@@ -13,7 +14,9 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/home" element={<Home />} />
+
+          {/* <Route path="*" element={<Navigate to="/" />} /> */}
         </Routes>
       </Box>
       <Footer />

@@ -32,11 +32,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(compression());
 
 app.use("/api", routes);
-app.use(
-  "/api/user",
-  passport.authenticate("jwt", { session: false }),
-  secureRoutes
-);
+app.use("/api", passport.authenticate("jwt", { session: false }), secureRoutes);
 
 // Set up mongoose connection
 mongoose.set("strictQuery", false);

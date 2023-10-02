@@ -1,6 +1,9 @@
 import express from "express";
+import { homeGet } from "../controllers/homeController";
 
 const router = express.Router();
+
+router.get("/home", homeGet);
 
 // router.get("/home", (req, res, next) => {
 //   res.json({

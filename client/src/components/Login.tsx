@@ -17,11 +17,13 @@ import {
   FormHelperText,
 } from "@chakra-ui/react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { MouseEvent } from "react";
+
 const Login = () => {
-  console.log("rendering login");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: HTMLFormElement) => {
     try {
@@ -41,7 +43,21 @@ const Login = () => {
         throw new Error("Error logging in");
       } else {
         localStorage.setItem("jwt", response.data.token);
-        console.log(response);
+        const token = response.data.token;
+        const yourConfig = {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        };
+        const data = await axios.get(
+          `${import.meta.env.VITE_ENDPOINT}/home`,
+          yourConfig
+        );
+        if (data.status !== 200) {
+          throw new Error("Error navigating to home");
+        } else {
+          navigate("/home");
+        }
       }
     } catch (error) {
       console.error(error);
