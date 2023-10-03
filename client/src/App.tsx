@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
+import Chat from "./components/Chat";
 import "./styles.css";
 
 const App = () => {
@@ -16,7 +17,8 @@ const App = () => {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/user/" element={<Profile />} />
+          <Route path="/profile/user/" element={<Profile />} />
+          <Route path="/chat/user/" element={<Chat />} />
 
           {/* <Route path="*" element={<Navigate to="/" />} /> */}
         </Routes>

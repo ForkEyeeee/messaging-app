@@ -3,7 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUser = void 0;
+exports.getChat = exports.getUser = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -17,13 +18,14 @@ dotenv_1.default.config();
 // );
 exports.getUser = (0, express_async_handler_1.default)(async (req, res, next) => {
     const user = await user_1.default.findOne({ _id: req.query.userid });
-    // Accessing userid from query parameters
-    // const commentIds = post.comments.map((comment: any) => comment.toString());
-    // const comments = await Comment.find({ _id: { $in: commentIds } }).select({
-    //   username: 1,
-    //   content: 1,
-    //   time: 1,
-    //   _id: 1,
-    // });
     res.json({ user: user });
+});
+exports.getChat = (0, express_async_handler_1.default)(async (req, res, next) => {
+    const clickedUser = await user_1.default.findOne({ _id: req.query.userid }); // this is the person you clicked on
+    const usertoken = req.headers.authorization;
+    const token = usertoken.split(" ");
+    const decoded = jsonwebtoken_1.default.verify(token[1], process.env.signature);
+    const currentUser = await user_1.default.findById({ _id: decoded.user._id });
+    console.log(decoded);
+    res.json({ currentUser: currentUser, clickedUser: clickedUser });
 });

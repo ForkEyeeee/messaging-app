@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Types } from "mongoose";
 import passport from "passport";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "../models/user";
 import asyncHandler from "express-async-handler";
 import dotenv from "dotenv";
@@ -18,14 +18,27 @@ dotenv.config();
 export const getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findOne({ _id: req.query.userid });
-    // Accessing userid from query parameters
-    // const commentIds = post.comments.map((comment: any) => comment.toString());
-    // const comments = await Comment.find({ _id: { $in: commentIds } }).select({
-    //   username: 1,
-    //   content: 1,
-    //   time: 1,
-    //   _id: 1,
-    // });
     res.json({ user: user });
+  }
+);
+
+interface Decoded {
+  user?: {
+    _id: string;
+    username: string;
+  };
+  iat: number;
+  exp: number;
+}
+
+export const getChat = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const clickedUser = await User.findOne({ _id: req.query.userid }); // this is the person you clicked on
+    const usertoken: any = req.headers.authorization;
+    const token = usertoken.split(" ");
+    const decoded: Decoded = jwt.verify(token[1], process.env.signature as any);
+    const currentUser = await User.findById({ _id: decoded.user._id } as any);
+    console.log(decoded);
+    res.json({ currentUser: currentUser, clickedUser: clickedUser });
   }
 );

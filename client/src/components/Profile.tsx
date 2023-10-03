@@ -31,7 +31,6 @@ const Profile = () => {
     __v: 0,
   });
 
-  const location = useLocation().pathname;
   const [searchParams] = useSearchParams();
   console.log(searchParams.get("userid"));
   useEffect(() => {
@@ -39,9 +38,9 @@ const Profile = () => {
       try {
         const token = localStorage.getItem("jwt");
         const response = await axios.get(
-          `${import.meta.env.VITE_ENDPOINT}/user?userid=${searchParams.get(
-            "userid"
-          )}`,
+          `${
+            import.meta.env.VITE_ENDPOINT
+          }/profile/user?userid=${searchParams.get("userid")}`,
           {
             headers: {
               Authorization: "Bearer " + token,

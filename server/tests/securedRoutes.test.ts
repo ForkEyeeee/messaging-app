@@ -83,9 +83,18 @@ describe("Navigate to Home Page", () => {
   it("get profile info", async () => {
     const test = await request(app).post("/login").send(testUser);
     const data = await request(app)
-      .get(`/user/`)
+      .get(`/profile/user/`)
       .set("Authorization", "Bearer " + test.body.token)
       .query({ userid: "651b3a462edfb41fa6ba48e1" });
+    expect(data.body.user).toBeDefined();
+  });
+  it("should return chat message json for current user and selected user", async () => {
+    const test = await request(app).post("/login").send(testUser);
+    const data = await request(app)
+      .get(`/chat/user/`)
+      .set("Authorization", "Bearer " + test.body.token)
+      .query({ userid: "651b3a462edfb41fa6ba48e1" });
+    console.log(data.body);
     expect(data.body.user).toBeDefined();
   });
 });
