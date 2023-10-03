@@ -1,0 +1,32 @@
+[
+  {
+    "_id": {
+      "$oid": "651bc1e4ff87ebc66275a4dd"
+    },
+    "sender": {
+      "$oid": "6517c7d6d949e4b87f7b6b51"
+    },
+    "recipient": {
+      "$oid": "6517c7d8d949e4b87f7b6b53"
+    },
+    "content": "Hey Jane, how are you?",
+    "time": {
+      "$date": "2023-10-01T15:00:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "651bc1e4ff87ebc66275a4de"
+    },
+    "sender": {
+      "$oid": "6517c7d8d949e4b87f7b6b53"
+    },
+    "recipient": {
+      "$oid": "6517c7d6d949e4b87f7b6b51"
+    },
+    "content": "I'm good John, thanks for asking! How about you?",
+    "time": {
+      "$date": "2023-10-01T15:05:00Z"
+    }
+  }
+]

@@ -9,6 +9,7 @@ const user_1 = __importDefault(require("../models/user"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+const message_1 = __importDefault(require("../models/message"));
 // export const getUsers = asyncHandler(
 //   async (req: Request, res: Response, next: NextFunction) => {
 //     let { userId } = req.body;
@@ -26,6 +27,20 @@ exports.getChat = (0, express_async_handler_1.default)(async (req, res, next) =>
     const token = usertoken.split(" ");
     const decoded = jsonwebtoken_1.default.verify(token[1], process.env.signature);
     const currentUser = await user_1.default.findById({ _id: decoded.user._id });
-    console.log(decoded);
-    res.json({ currentUser: currentUser, clickedUser: clickedUser });
+    const currentUserMessages = await message_1.default.find({
+        _id: {
+            $in: currentUser.messages,
+        },
+    });
+    const clickedUserMessages = await message_1.default.find({
+        _id: {
+            $in: clickedUser.messages,
+        },
+    });
+    console.log(currentUser);
+    console.log(clickedUser);
+    res.json({
+        currentUser: currentUserMessages,
+        clickedUser: clickedUserMessages,
+    });
 });

@@ -6,7 +6,7 @@ import User from "../models/user";
 import asyncHandler from "express-async-handler";
 import dotenv from "dotenv";
 dotenv.config();
-
+import Message from "../models/message";
 // export const getUsers = asyncHandler(
 //   async (req: Request, res: Response, next: NextFunction) => {
 //     let { userId } = req.body;
@@ -38,7 +38,21 @@ export const getChat = asyncHandler(
     const token = usertoken.split(" ");
     const decoded: Decoded = jwt.verify(token[1], process.env.signature as any);
     const currentUser = await User.findById({ _id: decoded.user._id } as any);
-    console.log(decoded);
-    res.json({ currentUser: currentUser, clickedUser: clickedUser });
+    const currentUserMessages = await Message.find({
+      _id: {
+        $in: currentUser.messages,
+      },
+    });
+    const clickedUserMessages = await Message.find({
+      _id: {
+        $in: clickedUser.messages,
+      },
+    });
+    console.log(currentUser);
+    console.log(clickedUser);
+    res.json({
+      currentUser: currentUserMessages,
+      clickedUser: clickedUserMessages,
+    });
   }
 );
