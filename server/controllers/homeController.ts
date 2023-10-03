@@ -13,7 +13,6 @@ export const homeGet = asyncHandler(
     const token = usertoken.split(" ");
     const decoded = jwt.verify(token[1], process.env.signature as any);
     const users = await User.find({});
-    console.log(users);
     res.json({ token: decoded, users: users });
   }
 );

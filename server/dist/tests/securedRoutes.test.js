@@ -42,8 +42,11 @@ app.use("/", routes_1.default);
 // });
 describe("Navigate to Home Page", () => {
     const testUser = {
+        _id: "651b3a462edfb41fa6ba48e1",
         username: "testUser",
         password: "testPassword",
+        messages: [],
+        __v: 0,
     };
     const wrongCredentials = {
         username: "testuser123",
@@ -69,5 +72,13 @@ describe("Navigate to Home Page", () => {
         expect(response.status).toBe(200);
         expect(response.body.users).toBeDefined();
         expect(response.body.token).toBeDefined();
+    });
+    it("get profile info", async () => {
+        const test = await (0, supertest_1.default)(app).post("/login").send(testUser);
+        const data = await (0, supertest_1.default)(app)
+            .get(`/user/`)
+            .set("Authorization", "Bearer " + test.body.token)
+            .query({ userid: "651b3a462edfb41fa6ba48e1" });
+        expect(data.body.user).toBeDefined();
     });
 });

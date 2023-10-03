@@ -2,8 +2,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/fontawesome-free-solid";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Text, VStack } from "@chakra-ui/react";
+import { Box, Text, VStack, Heading } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 interface User {
   messages: [];
@@ -31,19 +32,21 @@ const Profile = () => {
   });
 
   const location = useLocation().pathname;
-
+  const [searchParams] = useSearchParams();
+  console.log(searchParams.get("userid"));
   useEffect(() => {
     const getUsers = async () => {
       try {
         const token = localStorage.getItem("jwt");
-        const yourConfig = {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        };
         const response = await axios.get(
-          `${import.meta.env.VITE_ENDPOINT}${location}`,
-          yourConfig
+          `${import.meta.env.VITE_ENDPOINT}/user?userid=${searchParams.get(
+            "userid"
+          )}`,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
         );
         if (response.status !== 200) {
           throw new Error("Error getting users");
@@ -56,14 +59,15 @@ const Profile = () => {
       }
     };
     getUsers();
-  }, [location]);
+  }, [searchParams]);
 
   return (
     <Box>
+      <Heading>Account Details</Heading>
       {profile && (
         <VStack color={"white"}>
           <FontAwesomeIcon
-            icon={faUserCircle}
+            icon={faUserCircle as any}
             style={{ color: "#808080" }}
             size="3x"
           />

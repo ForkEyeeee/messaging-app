@@ -14,6 +14,5 @@ exports.homeGet = (0, express_async_handler_1.default)(async (req, res, next) =>
     const token = usertoken.split(" ");
     const decoded = jsonwebtoken_1.default.verify(token[1], process.env.signature);
     const users = await user_1.default.find({});
-    console.log(users);
     res.json({ token: decoded, users: users });
 });

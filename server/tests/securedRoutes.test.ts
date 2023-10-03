@@ -46,8 +46,11 @@ app.use("/", routes);
 
 describe("Navigate to Home Page", () => {
   const testUser = {
+    _id: "651b3a462edfb41fa6ba48e1",
     username: "testUser",
     password: "testPassword",
+    messages: [],
+    __v: 0,
   };
 
   const wrongCredentials = {
@@ -76,5 +79,13 @@ describe("Navigate to Home Page", () => {
     expect(response.status).toBe(200);
     expect(response.body.users).toBeDefined();
     expect(response.body.token).toBeDefined();
+  });
+  it("get profile info", async () => {
+    const test = await request(app).post("/login").send(testUser);
+    const data = await request(app)
+      .get(`/user/`)
+      .set("Authorization", "Bearer " + test.body.token)
+      .query({ userid: "651b3a462edfb41fa6ba48e1" });
+    expect(data.body.user).toBeDefined();
   });
 });

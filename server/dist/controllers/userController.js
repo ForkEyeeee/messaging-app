@@ -16,7 +16,8 @@ dotenv_1.default.config();
 //   }
 // );
 exports.getUser = (0, express_async_handler_1.default)(async (req, res, next) => {
-    const user = await user_1.default.findOne({ _id: req.params.userid });
+    const user = await user_1.default.findOne({ _id: req.query.userid });
+    // Accessing userid from query parameters
     // const commentIds = post.comments.map((comment: any) => comment.toString());
     // const comments = await Comment.find({ _id: { $in: commentIds } }).select({
     //   username: 1,
@@ -24,6 +25,5 @@ exports.getUser = (0, express_async_handler_1.default)(async (req, res, next) =>
     //   time: 1,
     //   _id: 1,
     // });
-    console.log(req.params.userid);
     res.json({ user: user });
 });

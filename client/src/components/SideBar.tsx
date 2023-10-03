@@ -18,7 +18,7 @@ import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import SideBarItem from "./User";
+import SideBarItem from "./SideBarItem";
 interface User {
   messages: [];
   _id: string;

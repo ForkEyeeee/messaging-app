@@ -17,7 +17,8 @@ dotenv.config();
 
 export const getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = await User.findOne({ _id: req.params.userid });
+    const user = await User.findOne({ _id: req.query.userid });
+    // Accessing userid from query parameters
     // const commentIds = post.comments.map((comment: any) => comment.toString());
     // const comments = await Comment.find({ _id: { $in: commentIds } }).select({
     //   username: 1,
@@ -25,7 +26,6 @@ export const getUser = asyncHandler(
     //   time: 1,
     //   _id: 1,
     // });
-    console.log(req.params.userid);
     res.json({ user: user });
   }
 );

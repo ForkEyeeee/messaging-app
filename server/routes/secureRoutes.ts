@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/home", homeGet);
 
-router.get("/user/:userid", getUser);
+router.get("/user/", getUser);
 
 // router.get("/home");
 

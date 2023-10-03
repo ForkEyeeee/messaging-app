@@ -8,7 +8,7 @@ const homeController_1 = require("../controllers/homeController");
 const userController_1 = require("../controllers/userController");
 const router = express_1.default.Router();
 router.get("/home", homeController_1.homeGet);
-router.get("/user/:userid", userController_1.getUser);
+router.get("/user/", userController_1.getUser);
 // router.get("/home");
 // router.get("/home", (req, res, next) => {
 //   res.json({
