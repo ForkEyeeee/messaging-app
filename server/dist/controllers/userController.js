@@ -15,24 +15,31 @@ exports.getUser = (0, express_async_handler_1.default)(async (req, res, next) =>
     res.json({ user: user });
 });
 exports.getChat = (0, express_async_handler_1.default)(async (req, res, next) => {
-    const clickedUser = await user_1.default.findById({
-        _id: req.query.userid,
-    }); // this is the person you clicked on
-    const usertoken = req.headers.authorization;
-    const token = usertoken.split(" ");
-    const decoded = jsonwebtoken_1.default.verify(token[1], process.env.signature);
-    const userId = decoded.user._id;
-    const currentUser = await user_1.default.findById({
-        _id: userId,
-    });
-    console.log(decoded);
-    const messages = await message_1.default.find({
-        $or: [
-            { _id: { $in: currentUser.messages } },
-            { _id: { $in: clickedUser.messages } },
-        ],
-    }).sort({ time: 1 });
-    res.json({
-        messages: messages,
-    });
+    try {
+        const clickedUser = await user_1.default.findById({
+            _id: req.query.userid,
+        }); // this is the person you clicked on
+        const usertoken = req.headers.authorization;
+        const token = usertoken.split(" ");
+        const decoded = jsonwebtoken_1.default.verify(token[1], process.env.signature);
+        const userId = decoded.user._id;
+        const currentUser = await user_1.default.findById({
+            _id: userId,
+        });
+        if (!clickedUser || !clickedUser.messages) {
+            res.status(404).json({ error: "Clicked user or messages not found" });
+        }
+        const messages = await message_1.default.find({
+            $or: [
+                { _id: { $in: currentUser.messages } },
+                { _id: { $in: clickedUser.messages } },
+            ],
+        }).sort({ time: 1 });
+        res.json({
+            messages: messages,
+        });
+    }
+    catch (error) {
+        console.error(error);
+    }
 });

@@ -36,28 +36,36 @@ interface User {
 
 export const getChat = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const clickedUser: User | null = await User.findById({
-      _id: req.query.userid,
-    }); // this is the person you clicked on
-    const usertoken: any = req.headers.authorization;
-    const token = usertoken.split(" ");
-    const decoded: Decoded | string | JwtPayload = jwt.verify(
-      token[1],
-      process.env.signature as any
-    );
-    const userId: any = (<any>decoded).user._id;
-    const currentUser: User | null = await User.findById({
-      _id: userId,
-    } as any);
-    console.log(decoded);
-    const messages = await Message.find({
-      $or: [
-        { _id: { $in: currentUser!.messages } },
-        { _id: { $in: clickedUser!.messages } },
-      ],
-    }).sort({ time: 1 });
-    res.json({
-      messages: messages,
-    });
+    try {
+      const clickedUser: User | null = await User.findById({
+        _id: req.query.userid,
+      }); // this is the person you clicked on
+      const usertoken: any = req.headers.authorization;
+      const token = usertoken.split(" ");
+      const decoded: Decoded | string | JwtPayload = jwt.verify(
+        token[1],
+        process.env.signature as any
+      );
+      const userId: any = (<any>decoded).user._id;
+      const currentUser: User | null = await User.findById({
+        _id: userId,
+      } as any);
+      if (!clickedUser || !clickedUser.messages) {
+        res.status(404).json({ error: "Clicked user or messages not found" });
+      }
+
+      const messages = await Message.find({
+        $or: [
+          { _id: { $in: currentUser!.messages } },
+          { _id: { $in: clickedUser!.messages } },
+        ],
+      }).sort({ time: 1 });
+
+      res.json({
+        messages: messages,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 );

@@ -3,10 +3,15 @@ import { vi } from "vitest";
 import "@testing-library/jest-dom";
 import Footer from "../components/Footer";
 import Login from "../components/Login";
+import { BrowserRouter } from "react-router-dom";
 
 describe("Login", () => {
   it("renders Login Component", () => {
-    render(<Login />);
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
     const loginText = screen.getByText("Login");
     const signUpText = screen.getByText("Don't have an account? Sign Up here.");
     const button = screen.getByRole("button");
@@ -15,7 +20,11 @@ describe("Login", () => {
     expect(button.textContent).toBe("Next");
   });
   it("next button performs the desired onclick action", () => {
-    render(<Login />);
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
     const handleClick = vi.fn();
     handleClick("hello", 1);
     const button = screen.getByRole("button");

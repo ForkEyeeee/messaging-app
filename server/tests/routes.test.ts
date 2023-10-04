@@ -12,12 +12,6 @@ app.use(expressTest.json());
 app.use(passport.initialize());
 
 app.use("/", routes);
-// beforeAll(async () => {
-//   await mongoTestingServer();
-// });
-// beforeEach(async () => {});
-
-// afterEach(async () => {});
 
 describe("POST /signup", () => {
   const testUser = {

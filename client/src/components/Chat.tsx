@@ -1,6 +1,4 @@
 import { Box, Input, VStack, Text, Flex } from "@chakra-ui/react";
-import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
-import { useLocation } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";

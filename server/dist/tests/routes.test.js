@@ -14,11 +14,6 @@ app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());
 app.use(auth_1.default.initialize());
 app.use("/", routes_1.default);
-// beforeAll(async () => {
-//   await mongoTestingServer();
-// });
-// beforeEach(async () => {});
-// afterEach(async () => {});
 describe("POST /signup", () => {
     const testUser = {
         username: "testUser",
