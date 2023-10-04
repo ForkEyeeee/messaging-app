@@ -27,20 +27,26 @@ exports.getChat = (0, express_async_handler_1.default)(async (req, res, next) =>
     const token = usertoken.split(" ");
     const decoded = jsonwebtoken_1.default.verify(token[1], process.env.signature);
     const currentUser = await user_1.default.findById({ _id: decoded.user._id });
-    const currentUserMessages = await message_1.default.find({
-        _id: {
-            $in: currentUser.messages,
-        },
-    });
-    const clickedUserMessages = await message_1.default.find({
-        _id: {
-            $in: clickedUser.messages,
-        },
-    });
+    // const currentUserMessages = await Message.find({
+    //   _id: {
+    //     $in: currentUser.messages,
+    //   },
+    // }).sort({ time: 1 });
+    // const clickedUserMessages = await Message.find({
+    //   _id: {
+    //     $in: clickedUser.messages,
+    //   },
+    // }).sort({ time: 1 });
+    const messages = await message_1.default.find({
+        $or: [
+            { _id: { $in: currentUser.messages } },
+            { _id: { $in: clickedUser.messages } },
+        ],
+    }).sort({ time: 1 });
     console.log(currentUser);
     console.log(clickedUser);
     res.json({
-        currentUser: currentUserMessages,
-        clickedUser: clickedUserMessages,
+        messages: messages,
+        // clickedUser: clickedUserMessages,
     });
 });

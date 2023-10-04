@@ -1,32 +1,37 @@
 [
   {
-    "_id": {
-      "$oid": "651bc1e4ff87ebc66275a4dd"
-    },
-    "sender": {
-      "$oid": "6517c7d6d949e4b87f7b6b51"
-    },
-    "recipient": {
-      "$oid": "6517c7d8d949e4b87f7b6b53"
-    },
-    "content": "Hey Jane, how are you?",
-    "time": {
-      "$date": "2023-10-01T15:00:00Z"
-    }
+    "_id": { "$oid": "651bc2e5ff87ebc66275a4e1" },
+    "sender": { "$oid": "6517c7d6d949e4b87f7b6b51" },
+    "recipient": { "$oid": "6517c7d8d949e4b87f7b6b53" },
+    "content": "Hey Jane, are you coming to the event tonight?",
+    "time": { "$date": "2023-10-01T16:00:00Z" }
   },
   {
-    "_id": {
-      "$oid": "651bc1e4ff87ebc66275a4de"
-    },
-    "sender": {
-      "$oid": "6517c7d8d949e4b87f7b6b53"
-    },
-    "recipient": {
-      "$oid": "6517c7d6d949e4b87f7b6b51"
-    },
-    "content": "I'm good John, thanks for asking! How about you?",
-    "time": {
-      "$date": "2023-10-01T15:05:00Z"
-    }
+    "_id": { "$oid": "651bc2e5ff87ebc66275a4e2" },
+    "sender": { "$oid": "6517c7d6d949e4b87f7b6b51" },
+    "recipient": { "$oid": "6517c7d8d949e4b87f7b6b53" },
+    "content": "Can you bring the camera with you?",
+    "time": { "$date": "2023-10-01T16:10:00Z" }
+  },
+  {
+    "_id": { "$oid": "651bc2e5ff87ebc66275a4e3" },
+    "sender": { "$oid": "6517c7d6d949e4b87f7b6b51" },
+    "recipient": { "$oid": "6517c7d8d949e4b87f7b6b53" },
+    "content": "Also, don't forget the tickets!",
+    "time": { "$date": "2023-10-01T16:20:00Z" }
+  },
+  {
+    "_id": { "$oid": "651bc2e5ff87ebc66275a4e4" },
+    "sender": { "$oid": "6517c7d8d949e4b87f7b6b53" },
+    "recipient": { "$oid": "6517c7d6d949e4b87f7b6b51" },
+    "content": "Sure, I'll bring the camera.",
+    "time": { "$date": "2023-10-01T16:30:00Z" }
+  },
+  {
+    "_id": { "$oid": "651bc2e5ff87ebc66275a4e5" },
+    "sender": { "$oid": "6517c7d8d949e4b87f7b6b53" },
+    "recipient": { "$oid": "6517c7d6d949e4b87f7b6b51" },
+    "content": "I have the tickets ready. See you!",
+    "time": { "$date": "2023-10-01T16:40:00Z" }
   }
 ]

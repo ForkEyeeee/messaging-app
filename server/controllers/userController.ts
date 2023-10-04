@@ -38,21 +38,28 @@ export const getChat = asyncHandler(
     const token = usertoken.split(" ");
     const decoded: Decoded = jwt.verify(token[1], process.env.signature as any);
     const currentUser = await User.findById({ _id: decoded.user._id } as any);
-    const currentUserMessages = await Message.find({
-      _id: {
-        $in: currentUser.messages,
-      },
-    });
-    const clickedUserMessages = await Message.find({
-      _id: {
-        $in: clickedUser.messages,
-      },
-    });
+    // const currentUserMessages = await Message.find({
+    //   _id: {
+    //     $in: currentUser.messages,
+    //   },
+    // }).sort({ time: 1 });
+    // const clickedUserMessages = await Message.find({
+    //   _id: {
+    //     $in: clickedUser.messages,
+    //   },
+    // }).sort({ time: 1 });
+    const messages = await Message.find({
+      $or: [
+        { _id: { $in: currentUser.messages } },
+        { _id: { $in: clickedUser.messages } },
+      ],
+    }).sort({ time: 1 });
+
     console.log(currentUser);
     console.log(clickedUser);
     res.json({
-      currentUser: currentUserMessages,
-      clickedUser: clickedUserMessages,
+      messages: messages,
+      // clickedUser: clickedUserMessages,
     });
   }
 );
