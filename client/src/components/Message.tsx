@@ -15,7 +15,7 @@ import SideBar from "./SideBar";
 const Message = ({ justifyContent, backGround, color, content }) => {
   return (
     <Flex justifyContent={justifyContent} w={"100%"}>
-      <Card minW={"75%"} bg={backGround}>
+      <Card minW={"75%"} maxW={"75%"} bg={backGround}>
         <CardBody>
           <Text fontSize={"16px"} color={color}>
             {content}

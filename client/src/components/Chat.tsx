@@ -52,30 +52,30 @@ const Chat = () => {
 
   return (
     //sort and render msgs by time
-    <Box h="427px">
-      <VStack justifyContent="flex-end" h={"100%"}>
+    <Box flex="1" display="flex" flexDirection="column" h="100vh">
+      <VStack flex="1" overflowY="scroll">
         {messages &&
-          messages.map(message =>
-            message.sender !== parseJwt(token).user._id ? (
-              <Message
-                justifyContent={"flex-start"}
-                backGround={"white"}
-                color={"black"}
-                key={message._id}
-                content={message.content}
-              />
-            ) : (
-              <Message
-                justifyContent={"flex-end"}
-                backGround={"blue.400"}
-                color={"white"}
-                key={message._id}
-                content={message.content}
-              />
-            )
-          )}
-        <Input width="100%" />
+          messages.map((message: any) => (
+            <Message
+              justifyContent={
+                message.sender !== parseJwt(token).user._id
+                  ? "flex-start"
+                  : "flex-end"
+              }
+              backGround={
+                message.sender !== parseJwt(token).user._id
+                  ? "white"
+                  : "blue.400"
+              }
+              color={
+                message.sender !== parseJwt(token).user._id ? "black" : "white"
+              }
+              key={message._id}
+              content={message.content}
+            />
+          ))}
       </VStack>
+      <Input width="100%" />
     </Box>
   );
 };
