@@ -7,18 +7,6 @@ import axios from "axios";
 import parseJwt from "./utils/parseJWT";
 import Message from "./Message";
 
-interface User {
-  messages: [];
-  _id: string;
-  username: string;
-  password: string;
-  firstname: string;
-  lastname: string;
-  about: string;
-  phone: string;
-  __v: number;
-}
-
 const Chat = () => {
   const [searchParams] = useSearchParams();
   const [messages, setMessages] = useState<string[]>([]);

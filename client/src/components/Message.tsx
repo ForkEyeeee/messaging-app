@@ -1,18 +1,13 @@
-import {
-  Box,
-  HStack,
-  Heading,
-  Flex,
-  Card,
-  CardBody,
-  Text,
-} from "@chakra-ui/react";
-import { useLocation } from "react-router-dom";
-import { Link as ReactRouterLink } from "react-router-dom";
-import { Link as ChakraLink } from "@chakra-ui/react";
-import SideBar from "./SideBar";
+import { Flex, Card, CardBody, Text } from "@chakra-ui/react";
 
-const Message = ({ justifyContent, backGround, color, content }) => {
+interface Props {
+  justifyContent: string;
+  backGround: string;
+  color: string;
+  content: string;
+}
+
+const Message = ({ justifyContent, backGround, color, content }: Props) => {
   return (
     <Flex justifyContent={justifyContent} w={"100%"}>
       <Card minW={"75%"} maxW={"75%"} bg={backGround}>
