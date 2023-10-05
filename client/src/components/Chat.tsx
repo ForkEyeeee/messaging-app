@@ -14,6 +14,7 @@ import axios from "axios";
 import parseJwt from "./utils/parseJWT";
 import Message from "./Message";
 import { FormEvent } from "react";
+
 const Chat = () => {
   const [searchParams] = useSearchParams();
   const [messages, setMessages] = useState<string[]>([]);
@@ -94,8 +95,12 @@ const Chat = () => {
               color={
                 message.sender !== parseJwt(token).user._id ? "black" : "white"
               }
+              popOverPlacement={
+                message.sender !== parseJwt(token).user._id ? "right" : "left"
+              }
               key={message._id}
               content={message.content}
+              isSender={message.sender !== parseJwt(token).user._id}
             />
           ))}
       </VStack>
