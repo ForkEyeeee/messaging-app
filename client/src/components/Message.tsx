@@ -1,20 +1,12 @@
 import {
   Flex,
   Card,
-  Box,
   CardBody,
   Text,
   Popover,
   PopoverTrigger,
   PopoverContent,
-  PopoverHeader,
   FormControl,
-  PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  Button,
-  PopoverCloseButton,
-  PopoverAnchor,
   HStack,
   Input,
 } from "@chakra-ui/react";
@@ -23,6 +15,15 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { FormEvent } from "react";
+
+interface Message {
+  _id: string;
+  sender: string;
+  recipient: string;
+  content: string;
+  time: Date;
+}
+
 interface Props {
   justifyContent: string;
   backGround: string;
@@ -30,6 +31,9 @@ interface Props {
   content: string;
   popOverPlacement: any;
   isSender: boolean;
+  messages: Message[];
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  messageId: string;
 }
 
 const Message = ({
@@ -46,11 +50,11 @@ const Message = ({
   const [isOpen, setIsOpen] = useState(false);
   const [inputText, setInputText] = useState("");
   const [searchParams] = useSearchParams();
-  const [newMessage, setNewMessage] = useState("");
   const token = localStorage.getItem("jwt");
 
   const handleEdit = () => setIsOpen(prevIsOpen => !prevIsOpen);
-  const handleInputOnChange = e => setInputText(e.target.value);
+  const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setInputText(e.target.value);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
@@ -80,12 +84,17 @@ const Message = ({
 
         const updatedMessages = messages;
         const oldMessage = updatedMessages.find(
-          message => message._id === response.data.Message._id
+          (message: Message) => message._id === response.data.Message._id
         );
-        oldMessage.content = message;
-        setMessages(updatedMessages);
-        handleEdit();
-        setNewMessage(message);
+        if (!oldMessage) {
+          console.error("Could not find message");
+        } else if (typeof oldMessage.content === "undefined") {
+          console.error("Content of the found message is undefined");
+        } else {
+          oldMessage.content = message as string; // adjust typecasting as necessary
+          setMessages([...updatedMessages]); // creates a new array reference
+          handleEdit();
+        }
       }
     } catch (error) {
       console.error(error);
@@ -169,8 +178,12 @@ const Message = ({
             }
           >
             <HStack spacing={5}>
-              <EditIcon onClick={handleEdit} />
-              <DeleteIcon onClick={handleDelete} />
+              <form onSubmit={handleSubmit}>
+                <EditIcon onClick={handleEdit} />
+              </form>
+              <form onSubmit={handleDelete}>
+                <DeleteIcon />
+              </form>
             </HStack>
           </Flex>
         </PopoverContent>

@@ -2,11 +2,9 @@ import {
   Box,
   Input,
   VStack,
-  Text,
-  Flex,
   FormControl,
-  FormLabel,
-  FormHelperText,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -14,11 +12,24 @@ import axios from "axios";
 import parseJwt from "./utils/parseJWT";
 import Message from "./Message";
 import { FormEvent } from "react";
+import { BsFillSendFill } from "react-icons/bs";
+
+interface MessageState {
+  _id: string;
+  sender: string;
+  recipient: string;
+  content: string;
+  time: Date;
+}
 
 const Chat = () => {
   const [searchParams] = useSearchParams();
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<MessageState[]>([]);
+  const [inputText, setInputText] = useState("");
+
   const token = localStorage.getItem("jwt");
+  const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setInputText(e.target.value);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
@@ -45,6 +56,7 @@ const Chat = () => {
         throw new Error("Error logging in");
       } else {
         setMessages(prevItems => [...prevItems, response.data.Message]);
+        setInputText("");
       }
     } catch (error) {
       console.error(error);
@@ -80,7 +92,7 @@ const Chat = () => {
     <Box flex="1" display="flex" flexDirection="column" h="100vh">
       <VStack flex="1" overflowY="scroll">
         {messages &&
-          messages.map((message: any) => (
+          messages.map((message: Message) => (
             <Message
               justifyContent={
                 message.sender !== parseJwt(token).user._id
@@ -109,12 +121,27 @@ const Chat = () => {
       </VStack>
       <form onSubmit={handleSubmit}>
         <FormControl>
-          <Input
-            type="text"
-            name="message"
-            placeholder="Message User"
-            maxLength={200}
-          />
+          <InputGroup>
+            <InputRightElement
+            // pointerEvents="none"
+            >
+              {/* <button type="submit" onClick={handleSubmit}> */}
+              <button type="submit">
+                <BsFillSendFill
+                // color="gray.300"
+                />
+              </button>
+              {/* </button> */}
+            </InputRightElement>
+            <Input
+              type="text"
+              name="message"
+              placeholder="Message User"
+              maxLength={200}
+              value={inputText}
+              onChange={handleInputOnChange}
+            />{" "}
+          </InputGroup>
         </FormControl>
       </form>
     </Box>

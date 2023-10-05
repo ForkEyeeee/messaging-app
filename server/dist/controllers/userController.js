@@ -92,11 +92,6 @@ exports.putChatMessage = [
         else {
             try {
                 const { message, messageId } = req.body;
-                console.log(req.body);
-                const usertoken = req.headers.authorization;
-                const token = usertoken.split(" ");
-                const decoded = jsonwebtoken_1.default.verify(token[1], process.env.signature);
-                const userId = decoded.user._id;
                 const updatedMessage = await message_1.default.findOneAndUpdate({ _id: messageId }, { content: message });
                 updatedMessage.content = message;
                 res.json({ Message: updatedMessage });

@@ -6,6 +6,7 @@ import { body, validationResult } from "express-validator";
 import dotenv from "dotenv";
 dotenv.config();
 import Message from "../models/message";
+import { Date } from "mongoose";
 
 export const getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -33,6 +34,14 @@ interface User {
   about: string;
   phone: string;
   __v: number;
+}
+
+interface Message {
+  _id: string;
+  sender: string;
+  recipient: string;
+  content: string;
+  time: Date;
 }
 
 export const getChat = asyncHandler(
@@ -122,19 +131,11 @@ export const putChatMessage = [
     } else {
       try {
         const { message, messageId } = req.body;
-        console.log(req.body);
-        const usertoken: any = req.headers.authorization;
-        const token = usertoken.split(" ");
-        const decoded: Decoded | string | JwtPayload = jwt.verify(
-          token[1],
-          process.env.signature as any
-        );
-        const userId: any = (<any>decoded).user._id;
-        const updatedMessage = await Message.findOneAndUpdate(
+        const updatedMessage: Message | null = await Message.findOneAndUpdate(
           { _id: messageId },
           { content: message }
         );
-        updatedMessage.content = message;
+        updatedMessage!.content = message;
         res.json({ Message: updatedMessage });
       } catch (error) {
         console.error(error);

@@ -1,8 +1,9 @@
 import express from "express";
 import { homeGet } from "../controllers/homeController";
-import { getChat, getUser } from "../controllers/userController";
-import { postChatMessage } from "../controllers/userController";
 import {
+  postChatMessage,
+  getChat,
+  getUser,
   putChatMessage,
   deleteChatMessage,
 } from "../controllers/userController";
