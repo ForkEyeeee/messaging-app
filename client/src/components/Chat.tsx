@@ -101,6 +101,9 @@ const Chat = () => {
               key={message._id}
               content={message.content}
               isSender={message.sender !== parseJwt(token).user._id}
+              setMessages={setMessages}
+              messages={messages}
+              messageId={message._id}
             />
           ))}
       </VStack>

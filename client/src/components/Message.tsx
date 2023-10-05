@@ -8,6 +8,7 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverHeader,
+  FormControl,
   PopoverBody,
   PopoverFooter,
   PopoverArrow,
@@ -15,8 +16,12 @@ import {
   PopoverCloseButton,
   PopoverAnchor,
   HStack,
+  Input,
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
 
 interface Props {
   justifyContent: string;
@@ -34,7 +39,59 @@ const Message = ({
   content,
   popOverPlacement,
   isSender,
+  messages,
+  setMessages,
+  messageId,
 }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [inputText, setInputText] = useState("");
+  const [searchParams] = useSearchParams();
+  const [newMessage, setNewMessage] = useState("");
+  const token = localStorage.getItem("jwt");
+
+  const handleClick = () => setIsOpen(prevIsOpen => !prevIsOpen);
+  const handleInputOnChange = e => setInputText(e.target.value);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      const formData = new FormData(e.currentTarget);
+      const message = formData.get("message");
+      const messageData = {
+        message,
+        messageId,
+      };
+      const yourConfig = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+      const response = await axios.put(
+        `${import.meta.env.VITE_ENDPOINT}/chat/user?userid=${searchParams.get(
+          "userid"
+        )}`,
+        messageData,
+        yourConfig
+      );
+      if (response.status !== 200) {
+        throw new Error("Error logging in");
+      } else {
+        console.log(response);
+
+        const updatedMessages = messages;
+        const oldMessage = updatedMessages.find(
+          message => message._id === response.data.Message._id
+        );
+        oldMessage.content = message;
+        setMessages(updatedMessages);
+        handleClick();
+        setNewMessage(message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Popover placement={popOverPlacement}>
       {/* <Box> */}
@@ -42,9 +99,28 @@ const Message = ({
         <PopoverTrigger>
           <Card maxW={"75%"} bg={backGround}>
             <CardBody>
-              <Text fontSize={"16px"} color={color}>
-                {content}
-              </Text>
+              {!isOpen ? (
+                <Text fontSize={"16px"} color={color}>
+                  {inputText === "" ? content : inputText}{" "}
+                </Text>
+              ) : (
+                <form onSubmit={handleSubmit}>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      size="lg"
+                      // variant="flushed"
+                      name="message"
+                      placeholder="Message User"
+                      onChange={handleInputOnChange}
+                      defaultValue={content}
+                      maxLength={200}
+                      required
+                    />
+                    <button>Save</button>
+                  </FormControl>
+                </form>
+              )}
             </CardBody>
           </Card>
         </PopoverTrigger>
@@ -65,7 +141,7 @@ const Message = ({
             }
           >
             <HStack spacing={5}>
-              <EditIcon />
+              <EditIcon onClick={handleClick} />
               <DeleteIcon />
             </HStack>
           </Flex>

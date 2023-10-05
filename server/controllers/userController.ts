@@ -109,3 +109,36 @@ export const postChatMessage = [
     }
   }),
 ];
+
+export const putChatMessage = [
+  body("message", "message must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+    } else {
+      try {
+        const { message, messageId } = req.body;
+        console.log(req.body);
+        const usertoken: any = req.headers.authorization;
+        const token = usertoken.split(" ");
+        const decoded: Decoded | string | JwtPayload = jwt.verify(
+          token[1],
+          process.env.signature as any
+        );
+        const userId: any = (<any>decoded).user._id;
+        const updatedMessage = await Message.findOneAndUpdate(
+          { _id: messageId },
+          { content: message }
+        );
+        updatedMessage.content = message;
+        res.json({ Message: updatedMessage });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }),
+];
