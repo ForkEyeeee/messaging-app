@@ -1,0 +1,31 @@
+[
+  {
+    "_id": { "$oid": "6517c7d6d949e4b87f7b6b51" },
+    "username": "example@example.com",
+    "password": "$2b$10$fC1WU2njVGEiMwOUipUzbOU464owa1/zc.82Qib/bQhTRfMuoL05W",
+    "firstname": "John",
+    "lastname": "Doe",
+    "about": "Hello! I am John Doe, an avid traveler and photographer.",
+    "phone": 1234213110,
+    "messages": [
+      { "$oid": "651bc2e5ff87ebc66275a4e1" },
+      { "$oid": "651bc2e5ff87ebc66275a4e2" },
+      { "$oid": "651bc2e5ff87ebc66275a4e3" }
+    ],
+    "__v": 0
+  },
+  {
+    "_id": { "$oid": "6517c7d8d949e4b87f7b6b53" },
+    "username": "example2@example.com",
+    "password": "$2b$10$K9OMxzP3LOTBFSdvFCsjiuPtesJeBDkto/vYgr7nGk6T9hhGRXY.6",
+    "firstname": "Jane",
+    "lastname": "Doe",
+    "about": "Hi! I'm Jane Doe, a software developer and tech enthusiast.",
+    "phone": 9876543210,
+    "messages": [
+      { "$oid": "651bc2e5ff87ebc66275a4e4" },
+      { "$oid": "651bc2e5ff87ebc66275a4e5" }
+    ],
+    "__v": 0
+  }
+]

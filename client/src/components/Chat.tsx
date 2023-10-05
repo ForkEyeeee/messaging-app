@@ -27,7 +27,6 @@ const Chat = () => {
           throw new Error("Error getting users");
         } else {
           setMessages(response.data.messages);
-          console.log(response.data);
         }
       } catch (error) {
         console.error(error);

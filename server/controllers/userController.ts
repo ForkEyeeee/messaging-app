@@ -53,7 +53,8 @@ export const getChat = asyncHandler(
       if (!clickedUser || !clickedUser.messages) {
         res.status(404).json({ error: "Clicked user or messages not found" });
       }
-
+      console.log("clickedUser " + clickedUser);
+      console.log("currentUser " + currentUser);
       const messages = await Message.find({
         $or: [
           { _id: { $in: currentUser!.messages } },

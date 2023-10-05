@@ -19,6 +19,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import SideBarItem from "./SideBarItem";
+import parseJwt from "./utils/parseJWT";
+
 interface User {
   messages: [];
   _id: string;
@@ -29,9 +31,7 @@ interface User {
 
 const SideBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>();
-  // useEffect(() => {
   const getUsers = async () => {
     try {
       const token = localStorage.getItem("jwt");
@@ -47,7 +47,10 @@ const SideBar = () => {
       if (data.status !== 200) {
         throw new Error("Error getting users");
       } else {
-        setUsers(data.data.users);
+        const users = data.data.users.filter(
+          (user: User) => user._id !== parseJwt(token).user._id
+        );
+        setUsers(users);
       }
     } catch (error) {
       console.error(error);

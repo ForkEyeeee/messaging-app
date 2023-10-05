@@ -29,6 +29,8 @@ exports.getChat = (0, express_async_handler_1.default)(async (req, res, next) =>
         if (!clickedUser || !clickedUser.messages) {
             res.status(404).json({ error: "Clicked user or messages not found" });
         }
+        console.log("clickedUser " + clickedUser);
+        console.log("currentUser " + currentUser);
         const messages = await message_1.default.find({
             $or: [
                 { _id: { $in: currentUser.messages } },
