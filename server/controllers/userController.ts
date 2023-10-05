@@ -8,9 +8,9 @@ dotenv.config();
 import Message from "../models/message";
 import { Date } from "mongoose";
 
-export const getUser = asyncHandler(
+export const getUserProfile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = await User.findOne({ _id: req.query.userid });
+    const user = await User.findOne({ _id: req.params.userid });
     res.json({ user: user });
   }
 );
@@ -44,11 +44,11 @@ interface Message {
   time: Date;
 }
 
-export const getChat = asyncHandler(
+export const getChatMessages = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const clickedUser: User | null = await User.findById({
-        _id: req.query.userid,
+        _id: req.params.userid,
       }); // this is the person you clicked on
       const usertoken: any = req.headers.authorization;
       const token = usertoken.split(" ");
@@ -81,7 +81,7 @@ export const getChat = asyncHandler(
   }
 );
 
-export const postChatMessage = [
+export const postUserChatMessage = [
   body("message", "message must not be empty.")
     .trim()
     .isLength({ min: 1 })
@@ -94,12 +94,15 @@ export const postChatMessage = [
       try {
         const { message, recipient } = req.body;
         const usertoken: any = req.headers.authorization;
+        console.log("userId: " + usertoken);
+
         const token = usertoken.split(" ");
         const decoded: Decoded | string | JwtPayload = jwt.verify(
           token[1],
           process.env.signature as any
         );
         const userId: any = (<any>decoded).user._id;
+
         const newMessage = new Message({
           sender: userId,
           recipient: recipient,
@@ -119,7 +122,7 @@ export const postChatMessage = [
   }),
 ];
 
-export const putChatMessage = [
+export const putUserChatMessage = [
   body("message", "message must not be empty.")
     .trim()
     .isLength({ min: 1 })
@@ -131,6 +134,7 @@ export const putChatMessage = [
     } else {
       try {
         const { message, messageId } = req.body;
+        console.log("here");
         const updatedMessage: Message | null = await Message.findOneAndUpdate(
           { _id: messageId },
           { content: message }
@@ -144,7 +148,7 @@ export const putChatMessage = [
   }),
 ];
 
-export const deleteChatMessage = asyncHandler(
+export const deleteUserChatMessage = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { messageId } = req.body;

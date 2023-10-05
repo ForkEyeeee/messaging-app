@@ -6,14 +6,14 @@ import { faUserCircle } from "@fortawesome/fontawesome-free-solid";
 const SideBarItem = ({ children, url }: { children: string; url: string }) => {
   return (
     <HStack>
-      <ChakraLink as={ReactRouterLink} to={`/profile/user?userid=${url}`}>
+      <ChakraLink as={ReactRouterLink} to={`/user/${url}/profile`}>
         <FontAwesomeIcon
           icon={faUserCircle as any}
           style={{ color: "#808080" }}
           size="3x"
         />
       </ChakraLink>
-      <ChakraLink as={ReactRouterLink} to={`/chat/user?userid=${url}`}>
+      <ChakraLink as={ReactRouterLink} to={`/user/${url}/chat`}>
         {children}
       </ChakraLink>
     </HStack>

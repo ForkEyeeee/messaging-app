@@ -9,10 +9,11 @@ import {
   FormControl,
   HStack,
   Input,
+  Button,
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { FormEvent } from "react";
 
@@ -34,6 +35,8 @@ interface Props {
   messages: Message[];
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   messageId: string;
+  isOpen: boolean;
+  setOpenMessageId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const Message = ({
@@ -46,13 +49,22 @@ const Message = ({
   messages,
   setMessages,
   messageId,
+  isOpen,
+  setOpenMessageId,
 }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [inputText, setInputText] = useState("");
-  const [searchParams] = useSearchParams();
-  const token = localStorage.getItem("jwt");
 
-  const handleEdit = () => setIsOpen(prevIsOpen => !prevIsOpen);
+  const token = localStorage.getItem("jwt");
+  const location = useLocation().pathname;
+
+  const handleEdit = () => {
+    if (isOpen) {
+      setOpenMessageId(null);
+    } else {
+      setOpenMessageId(messageId);
+    }
+  };
+
   const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setInputText(e.target.value);
 
@@ -71,9 +83,7 @@ const Message = ({
         },
       };
       const response = await axios.put(
-        `${import.meta.env.VITE_ENDPOINT}/chat/user?userid=${searchParams.get(
-          "userid"
-        )}`,
+        `${import.meta.env.VITE_ENDPOINT}${location}`,
         messageData,
         yourConfig
       );
@@ -91,8 +101,8 @@ const Message = ({
         } else if (typeof oldMessage.content === "undefined") {
           console.error("Content of the found message is undefined");
         } else {
-          oldMessage.content = message as string; // adjust typecasting as necessary
-          setMessages([...updatedMessages]); // creates a new array reference
+          oldMessage.content = message as string;
+          setMessages([...updatedMessages]);
           handleEdit();
         }
       }
@@ -113,9 +123,7 @@ const Message = ({
         },
       };
       const response = await axios.delete(
-        `${import.meta.env.VITE_ENDPOINT}/chat/user?userid=${searchParams.get(
-          "userid"
-        )}`,
+        `${import.meta.env.VITE_ENDPOINT}${location}`,
         yourConfig
       );
 
@@ -154,7 +162,10 @@ const Message = ({
                       maxLength={200}
                       required
                     />
-                    <button>Save</button>
+                    <HStack>
+                      <button type="submit">Save</button>
+                      <button onClick={handleEdit}>Cancel</button>
+                    </HStack>
                   </FormControl>
                 </form>
               )}

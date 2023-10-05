@@ -6,7 +6,7 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import parseJwt from "./utils/parseJWT";
@@ -23,11 +23,14 @@ interface MessageState {
 }
 
 const Chat = () => {
-  const [searchParams] = useSearchParams();
   const [messages, setMessages] = useState<MessageState[]>([]);
   const [inputText, setInputText] = useState("");
+  const [openMessageId, setOpenMessageId] = useState<string | null>(null);
 
+  const recipient = `${useLocation().pathname}`.split("/")[2];
+  const location = useLocation().pathname;
   const token = localStorage.getItem("jwt");
+
   const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setInputText(e.target.value);
 
@@ -38,7 +41,7 @@ const Chat = () => {
       const message = formData.get("message");
       const messageData = {
         message,
-        recipient: searchParams.get("userid"),
+        recipient: recipient,
       };
       const yourConfig = {
         headers: {
@@ -46,9 +49,7 @@ const Chat = () => {
         },
       };
       const response = await axios.post(
-        `${import.meta.env.VITE_ENDPOINT}/chat/user?userid=${searchParams.get(
-          "userid"
-        )}`,
+        `${import.meta.env.VITE_ENDPOINT}${location}`,
         messageData,
         yourConfig
       );
@@ -62,13 +63,12 @@ const Chat = () => {
       console.error(error);
     }
   };
+
   useEffect(() => {
     const getChatMessages = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_ENDPOINT}/chat/user?userid=${searchParams.get(
-            "userid"
-          )}`,
+          `${import.meta.env.VITE_ENDPOINT}${location}`,
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -85,8 +85,7 @@ const Chat = () => {
       }
     };
     getChatMessages();
-  }, [token, searchParams]);
-
+  }, [token, location]);
   return (
     //sort and render msgs by time
     <Box flex="1" display="flex" flexDirection="column" h="100vh">
@@ -116,34 +115,32 @@ const Chat = () => {
               setMessages={setMessages}
               messages={messages}
               messageId={message._id}
+              isOpen={message._id === openMessageId}
+              setOpenMessageId={setOpenMessageId}
             />
           ))}
       </VStack>
-      <form onSubmit={handleSubmit}>
-        <FormControl>
-          <InputGroup>
-            <InputRightElement
-            // pointerEvents="none"
-            >
-              {/* <button type="submit" onClick={handleSubmit}> */}
-              <button type="submit">
-                <BsFillSendFill
-                // color="gray.300"
-                />
-              </button>
-              {/* </button> */}
-            </InputRightElement>
-            <Input
-              type="text"
-              name="message"
-              placeholder="Message User"
-              maxLength={200}
-              value={inputText}
-              onChange={handleInputOnChange}
-            />{" "}
-          </InputGroup>
-        </FormControl>
-      </form>
+      {!openMessageId && (
+        <form onSubmit={handleSubmit}>
+          <FormControl>
+            <InputGroup>
+              <InputRightElement>
+                <button type="submit">
+                  <BsFillSendFill />
+                </button>
+              </InputRightElement>
+              <Input
+                type="text"
+                name="message"
+                placeholder="Message User"
+                maxLength={200}
+                value={inputText}
+                onChange={handleInputOnChange}
+              />
+            </InputGroup>
+          </FormControl>
+        </form>
+      )}
     </Box>
   );
 };

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteChatMessage = exports.putChatMessage = exports.postChatMessage = exports.getChat = exports.getUser = void 0;
+exports.deleteUserChatMessage = exports.putUserChatMessage = exports.postUserChatMessage = exports.getChatMessages = exports.getUserProfile = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
@@ -11,14 +11,14 @@ const express_validator_1 = require("express-validator");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const message_1 = __importDefault(require("../models/message"));
-exports.getUser = (0, express_async_handler_1.default)(async (req, res, next) => {
-    const user = await user_1.default.findOne({ _id: req.query.userid });
+exports.getUserProfile = (0, express_async_handler_1.default)(async (req, res, next) => {
+    const user = await user_1.default.findOne({ _id: req.params.userid });
     res.json({ user: user });
 });
-exports.getChat = (0, express_async_handler_1.default)(async (req, res, next) => {
+exports.getChatMessages = (0, express_async_handler_1.default)(async (req, res, next) => {
     try {
         const clickedUser = await user_1.default.findById({
-            _id: req.query.userid,
+            _id: req.params.userid,
         }); // this is the person you clicked on
         const usertoken = req.headers.authorization;
         const token = usertoken.split(" ");
@@ -46,7 +46,7 @@ exports.getChat = (0, express_async_handler_1.default)(async (req, res, next) =>
         console.error(error);
     }
 });
-exports.postChatMessage = [
+exports.postUserChatMessage = [
     (0, express_validator_1.body)("message", "message must not be empty.")
         .trim()
         .isLength({ min: 1 })
@@ -60,6 +60,7 @@ exports.postChatMessage = [
             try {
                 const { message, recipient } = req.body;
                 const usertoken = req.headers.authorization;
+                console.log("userId: " + usertoken);
                 const token = usertoken.split(" ");
                 const decoded = jsonwebtoken_1.default.verify(token[1], process.env.signature);
                 const userId = decoded.user._id;
@@ -79,7 +80,7 @@ exports.postChatMessage = [
         }
     }),
 ];
-exports.putChatMessage = [
+exports.putUserChatMessage = [
     (0, express_validator_1.body)("message", "message must not be empty.")
         .trim()
         .isLength({ min: 1 })
@@ -92,6 +93,7 @@ exports.putChatMessage = [
         else {
             try {
                 const { message, messageId } = req.body;
+                console.log("here");
                 const updatedMessage = await message_1.default.findOneAndUpdate({ _id: messageId }, { content: message });
                 updatedMessage.content = message;
                 res.json({ Message: updatedMessage });
@@ -102,7 +104,7 @@ exports.putChatMessage = [
         }
     }),
 ];
-exports.deleteChatMessage = (0, express_async_handler_1.default)(async (req, res, next) => {
+exports.deleteUserChatMessage = (0, express_async_handler_1.default)(async (req, res, next) => {
     try {
         const { messageId } = req.body;
         await message_1.default.findOneAndDelete({ _id: messageId });

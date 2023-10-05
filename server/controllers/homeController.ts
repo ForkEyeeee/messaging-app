@@ -7,7 +7,7 @@ import User from "../models/user";
 import dotenv from "dotenv";
 dotenv.config();
 
-export const homeGet = asyncHandler(
+export const getHomePage = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const usertoken: any = req.headers.authorization;
     const token = usertoken.split(" ");

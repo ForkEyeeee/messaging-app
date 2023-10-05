@@ -70,4 +70,19 @@ describe("Navigate to Home Page", () => {
         expect(data.body.error).toBe("Clicked user or messages not found");
         expect(404);
     });
+    it("should return new message", async () => {
+        const test = await (0, supertest_1.default)(app).post("/login").send(testUser);
+        console.log("token " + test.body.token);
+        const data = await (0, supertest_1.default)(app)
+            .post(`/chat/user`)
+            .set("Authorization", "Bearer " + test.body.token)
+            .query({ userid: "651b3a462edfb41fa6ba48e1" })
+            .send({
+            message: "Im there already.",
+            recipient: "651b3a462edfb41fa6ba48e1",
+        });
+        console.log(data.body);
+        expect(data.body).toBeDefined();
+        expect(200);
+    });
 });

@@ -11,7 +11,9 @@ const NavBar = () => {
         <HStack justifyContent="space-between">
           <SideBar data-testid="hamburger-icon" />
           <Heading fontSize={{ base: 20 }}>Messaging App</Heading>
-          {/* <ChakraLink as={ReactRouterLink} to={`/`}></ChakraLink> */}
+          <ChakraLink as={ReactRouterLink} to={`/home`}>
+            Home
+          </ChakraLink>
         </HStack>
       </Box>
     </Box>

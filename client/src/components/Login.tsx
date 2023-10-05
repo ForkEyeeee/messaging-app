@@ -17,14 +17,14 @@ import {
   FormHelperText,
 } from "@chakra-ui/react";
 import React, { FormEventHandler } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { FormEvent } from "react";
 
 const Login = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
-
+  const location = useLocation().pathname;
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
@@ -36,7 +36,7 @@ const Login = () => {
         password: password,
       };
       const response = await axios.post(
-        `${import.meta.env.VITE_ENDPOINT}/login`,
+        `${import.meta.env.VITE_ENDPOINT}${location}`,
         userCredentials
       );
       if (response.status !== 200) {

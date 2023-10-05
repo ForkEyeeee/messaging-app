@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Text, VStack, Heading } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
 
 interface User {
   messages: [];
@@ -30,17 +29,14 @@ const Profile = () => {
     phone: "",
     __v: 0,
   });
+  const location = useLocation().pathname;
 
-  const [searchParams] = useSearchParams();
-  console.log(searchParams.get("userid"));
   useEffect(() => {
     const getUsers = async () => {
       try {
         const token = localStorage.getItem("jwt");
         const response = await axios.get(
-          `${
-            import.meta.env.VITE_ENDPOINT
-          }/profile/user?userid=${searchParams.get("userid")}`,
+          `${import.meta.env.VITE_ENDPOINT}${location}`,
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -58,7 +54,7 @@ const Profile = () => {
       }
     };
     getUsers();
-  }, [searchParams]);
+  }, [location]);
 
   return (
     <Box>

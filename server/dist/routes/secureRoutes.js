@@ -7,18 +7,10 @@ const express_1 = __importDefault(require("express"));
 const homeController_1 = require("../controllers/homeController");
 const userController_1 = require("../controllers/userController");
 const router = express_1.default.Router();
-router.get("/home", homeController_1.homeGet);
-router.get("/profile/user/", userController_1.getUser);
-router.get("/chat/user/", userController_1.getChat);
-router.post("/chat/user/", userController_1.postChatMessage);
-router.put("/chat/user/", userController_1.putChatMessage);
-router.delete("/chat/user/", userController_1.deleteChatMessage);
-// router.get("/home");
-// router.get("/home", (req, res, next) => {
-//   res.json({
-//     message: "You made it to the secure route",
-//     user: req.user,
-//     token: req.body.secret_token,
-//   });
-// });
+router.get("/home", homeController_1.getHomePage);
+router.get("/user/:userid/profile", userController_1.getUserProfile);
+router.get("/user/:userid/chat", userController_1.getChatMessages);
+router.post("/user/:userid/chat", userController_1.postUserChatMessage);
+router.put("/user/:userid/chat/", userController_1.putUserChatMessage);
+router.delete("/user/:userid/chat/", userController_1.deleteUserChatMessage);
 exports.default = router;

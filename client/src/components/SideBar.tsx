@@ -16,7 +16,7 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import { useEffect } from "react";
 import axios from "axios";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import SideBarItem from "./SideBarItem";
 import parseJwt from "./utils/parseJWT";
@@ -32,6 +32,8 @@ interface User {
 const SideBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [users, setUsers] = useState<User[]>();
+  const location = useLocation().pathname;
+
   const getUsers = async () => {
     try {
       const token = localStorage.getItem("jwt");
