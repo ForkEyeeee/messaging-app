@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "../models/user";
 import asyncHandler from "express-async-handler";
+import { body, validationResult } from "express-validator";
 import dotenv from "dotenv";
 dotenv.config();
 import Message from "../models/message";
@@ -70,3 +71,41 @@ export const getChat = asyncHandler(
     }
   }
 );
+
+export const postChatMessage = [
+  body("message", "message must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+    } else {
+      try {
+        const { message, recipient } = req.body;
+        const usertoken: any = req.headers.authorization;
+        const token = usertoken.split(" ");
+        const decoded: Decoded | string | JwtPayload = jwt.verify(
+          token[1],
+          process.env.signature as any
+        );
+        const userId: any = (<any>decoded).user._id;
+        const newMessage = new Message({
+          sender: userId,
+          recipient: recipient,
+          content: message,
+          time: new Date(),
+        });
+        await newMessage.save();
+        await User.findOneAndUpdate(
+          { _id: userId },
+          { $push: { messages: newMessage } }
+        );
+        res.json({ Message: newMessage });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }),
+];

@@ -1,15 +1,54 @@
-import { Box, Input, VStack, Text, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Input,
+  VStack,
+  Text,
+  Flex,
+  FormControl,
+  FormLabel,
+  FormHelperText,
+} from "@chakra-ui/react";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import parseJwt from "./utils/parseJWT";
 import Message from "./Message";
-
+import { FormEvent } from "react";
 const Chat = () => {
   const [searchParams] = useSearchParams();
   const [messages, setMessages] = useState<string[]>([]);
   const token = localStorage.getItem("jwt");
 
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      const formData = new FormData(e.currentTarget);
+      const message = formData.get("message");
+      const messageData = {
+        message,
+        recipient: searchParams.get("userid"),
+      };
+      const yourConfig = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+      const response = await axios.post(
+        `${import.meta.env.VITE_ENDPOINT}/chat/user?userid=${searchParams.get(
+          "userid"
+        )}`,
+        messageData,
+        yourConfig
+      );
+      if (response.status !== 200) {
+        throw new Error("Error logging in");
+      } else {
+        console.log(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
     const getChatMessages = async () => {
       try {
@@ -33,7 +72,7 @@ const Chat = () => {
       }
     };
     getChatMessages();
-  }, [searchParams]);
+  }, [token, searchParams]);
 
   return (
     //sort and render msgs by time
@@ -60,7 +99,16 @@ const Chat = () => {
             />
           ))}
       </VStack>
-      <Input width="100%" />
+      <form onSubmit={handleSubmit}>
+        <FormControl>
+          <Input
+            type="text"
+            name="message"
+            placeholder="Message User"
+            maxLength={200}
+          />
+        </FormControl>
+      </form>
     </Box>
   );
 };
