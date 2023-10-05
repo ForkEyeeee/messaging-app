@@ -43,7 +43,7 @@ const Chat = () => {
       if (response.status !== 200) {
         throw new Error("Error logging in");
       } else {
-        console.log(response);
+        setMessages(prevItems => [...prevItems, response.data.Message]);
       }
     } catch (error) {
       console.error(error);
