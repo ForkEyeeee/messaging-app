@@ -2,7 +2,10 @@ import express from "express";
 import { homeGet } from "../controllers/homeController";
 import { getChat, getUser } from "../controllers/userController";
 import { postChatMessage } from "../controllers/userController";
-import { putChatMessage } from "../controllers/userController";
+import {
+  putChatMessage,
+  deleteChatMessage,
+} from "../controllers/userController";
 
 const router = express.Router();
 
@@ -15,6 +18,8 @@ router.get("/chat/user/", getChat);
 router.post("/chat/user/", postChatMessage);
 
 router.put("/chat/user/", putChatMessage);
+
+router.delete("/chat/user/", deleteChatMessage);
 
 // router.get("/home");
 

@@ -14,6 +14,7 @@ router.get("/profile/user/", userController_1.getUser);
 router.get("/chat/user/", userController_1.getChat);
 router.post("/chat/user/", userController_2.postChatMessage);
 router.put("/chat/user/", userController_3.putChatMessage);
+router.delete("/chat/user/", userController_3.deleteChatMessage);
 // router.get("/home");
 // router.get("/home", (req, res, next) => {
 //   res.json({

@@ -22,7 +22,7 @@ import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
-
+import { FormEvent } from "react";
 interface Props {
   justifyContent: string;
   backGround: string;
@@ -49,7 +49,7 @@ const Message = ({
   const [newMessage, setNewMessage] = useState("");
   const token = localStorage.getItem("jwt");
 
-  const handleClick = () => setIsOpen(prevIsOpen => !prevIsOpen);
+  const handleEdit = () => setIsOpen(prevIsOpen => !prevIsOpen);
   const handleInputOnChange = e => setInputText(e.target.value);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -84,8 +84,36 @@ const Message = ({
         );
         oldMessage.content = message;
         setMessages(updatedMessages);
-        handleClick();
+        handleEdit();
         setNewMessage(message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDelete = async (e: FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      const yourConfig = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+        data: {
+          messageId: messageId,
+        },
+      };
+      const response = await axios.delete(
+        `${import.meta.env.VITE_ENDPOINT}/chat/user?userid=${searchParams.get(
+          "userid"
+        )}`,
+        yourConfig
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Error logging in");
+      } else {
+        console.log(response);
       }
     } catch (error) {
       console.error(error);
@@ -141,8 +169,8 @@ const Message = ({
             }
           >
             <HStack spacing={5}>
-              <EditIcon onClick={handleClick} />
-              <DeleteIcon />
+              <EditIcon onClick={handleEdit} />
+              <DeleteIcon onClick={handleDelete} />
             </HStack>
           </Flex>
         </PopoverContent>

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.putChatMessage = exports.postChatMessage = exports.getChat = exports.getUser = void 0;
+exports.deleteChatMessage = exports.putChatMessage = exports.postChatMessage = exports.getChat = exports.getUser = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
@@ -107,3 +107,14 @@ exports.putChatMessage = [
         }
     }),
 ];
+exports.deleteChatMessage = (0, express_async_handler_1.default)(async (req, res, next) => {
+    try {
+        const { messageId } = req.body;
+        await message_1.default.findOneAndDelete({ _id: messageId });
+        await user_1.default.findOneAndUpdate({ messages: messageId }, { $pull: { messages: messageId } });
+        res.json({ messageId });
+    }
+    catch (error) {
+        console.error(error);
+    }
+});

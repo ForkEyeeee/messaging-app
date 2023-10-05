@@ -142,3 +142,19 @@ export const putChatMessage = [
     }
   }),
 ];
+
+export const deleteChatMessage = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { messageId } = req.body;
+      await Message.findOneAndDelete({ _id: messageId });
+      await User.findOneAndUpdate(
+        { messages: messageId },
+        { $pull: { messages: messageId } }
+      );
+      res.json({ messageId });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
