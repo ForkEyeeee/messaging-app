@@ -36,10 +36,9 @@ exports.logInPost = (0, express_async_handler_1.default)(async (req, res, next) 
                     return next(error);
                 const body = { _id: user._id, username: user.username };
                 const token = jsonwebtoken_1.default.sign({ user: body }, process.env.signature, {
-                    expiresIn: "365d",
+                    expiresIn: "1hr",
                 });
                 const message = info.message;
-                // res.redirect("/home");
                 return res.json({ message, token });
             });
         }

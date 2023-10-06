@@ -57,12 +57,10 @@ export const logInPost = asyncHandler(
               { user: body },
               process.env.signature as any,
               {
-                expiresIn: "365d",
+                expiresIn: "1hr",
               }
             );
             const message = info.message;
-            // res.redirect("/home");
-
             return res.json({ message, token });
           });
         } catch (error) {
