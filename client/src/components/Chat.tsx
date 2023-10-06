@@ -130,6 +130,7 @@ const Chat = () => {
                 </button>
               </InputRightElement>
               <Input
+                role="chat-input"
                 type="text"
                 name="message"
                 placeholder="Message User"

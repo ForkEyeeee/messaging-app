@@ -144,7 +144,7 @@ const Message = ({
       {/* <Box> */}
       <Flex justifyContent={justifyContent} w={"100%"}>
         <PopoverTrigger>
-          <Card maxW={"75%"} bg={backGround}>
+          <Card maxW={"75%"} bg={backGround} role="message-card">
             <CardBody>
               {!isOpen ? (
                 <Text fontSize={"16px"} color={color}>

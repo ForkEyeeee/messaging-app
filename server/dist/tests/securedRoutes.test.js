@@ -32,13 +32,6 @@ describe("Navigate to Home Page", () => {
         messages: [],
         __v: 0,
     };
-    const testMessage = {
-        _id: "651bc2e5ff87ebc66275a4e1",
-        sender: "6517c7d6d949e4b87f7b6b51",
-        recipient: "6517c7d8d949e4b87f7b6b53",
-        content: "Hey Jane, are you coming to the event tonight?",
-        time: "2023-10-01T16:00:00Z",
-    };
     it("should create a new user and return a successful signup message", async () => {
         const response = await (0, supertest_1.default)(app).post("/signup").send(testUser);
         expect(response.status).toBe(200);
@@ -90,7 +83,6 @@ describe("Navigate to Home Page", () => {
     });
     it("should update a message content", async () => {
         const test = await (0, supertest_1.default)(app).post("/login").send(testUser);
-        testMessage.content = "changed";
         const response = await (0, supertest_1.default)(app)
             .put(`/user/651b3a462edfb41fa6ba48e1/chat`)
             .set("Authorization", "Bearer " + test.body.token)
@@ -98,9 +90,19 @@ describe("Navigate to Home Page", () => {
             message: "Take your time Man",
             messageId: "651bc2e5ff87ebc66275a4e4",
         });
-        console.log(response.body);
         expect(response.status).toBe(200);
         expect(response.body.Message).toBeDefined();
-        // expect(response.body.Message.content).toBe(newMessage);
+    });
+    it("should delete a message", async () => {
+        const test = await (0, supertest_1.default)(app).post("/login").send(testUser);
+        const response = await (0, supertest_1.default)(app)
+            .delete(`/user/651b3a462edfb41fa6ba48e1/chat`)
+            .set("Authorization", "Bearer " + test.body.token)
+            .send({
+            messageId: "651bc2e5ff87ebc66275a4e4",
+        });
+        console.log(response.body);
+        expect(response.status).toBe(200);
+        expect(response.body).toBeDefined();
     });
 });
