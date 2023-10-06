@@ -12,7 +12,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
-import { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { FormEvent } from "react";
@@ -129,7 +129,7 @@ const Message = ({
       if (response.status !== 200) {
         throw new Error("Error logging in");
       } else {
-        const updatedMessages: Message = messages.filter(
+        const updatedMessages = messages.filter(
           message => message._id !== messageId
         );
         setMessages(updatedMessages);
