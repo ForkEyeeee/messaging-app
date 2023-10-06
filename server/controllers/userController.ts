@@ -60,21 +60,19 @@ export const getChatMessages = asyncHandler(
       const currentUser: User | null = await User.findById({
         _id: userId,
       } as any);
-      if (!clickedUser || !clickedUser.messages) {
+      if (clickedUser === null || clickedUser === null) {
         res.status(404).json({ error: "Clicked user or messages not found" });
+      } else {
+        const messages = await Message.find({
+          $or: [
+            { _id: { $in: currentUser!.messages } },
+            { _id: { $in: clickedUser!.messages } },
+          ],
+        }).sort({ time: 1 });
+        res.json({
+          messages: messages,
+        });
       }
-      console.log("clickedUser " + clickedUser);
-      console.log("currentUser " + currentUser);
-      const messages = await Message.find({
-        $or: [
-          { _id: { $in: currentUser!.messages } },
-          { _id: { $in: clickedUser!.messages } },
-        ],
-      }).sort({ time: 1 });
-
-      res.json({
-        messages: messages,
-      });
     } catch (error) {
       console.error(error);
     }
@@ -94,7 +92,6 @@ export const postUserChatMessage = [
       try {
         const { message, recipient } = req.body;
         const usertoken: any = req.headers.authorization;
-        console.log("userId: " + usertoken);
 
         const token = usertoken.split(" ");
         const decoded: Decoded | string | JwtPayload = jwt.verify(
@@ -133,8 +130,8 @@ export const putUserChatMessage = [
       res.status(400).json({ errors: errors.array() });
     } else {
       try {
-        const { message, messageId } = req.body;
         console.log("here");
+        const { message, messageId } = req.body;
         const updatedMessage: Message | null = await Message.findOneAndUpdate(
           { _id: messageId },
           { content: message }

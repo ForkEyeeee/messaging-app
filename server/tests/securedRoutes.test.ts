@@ -58,34 +58,53 @@ describe("Navigate to Home Page", () => {
   it("get profile info", async () => {
     const test = await request(app).post("/login").send(testUser);
     const data = await request(app)
-      .get(`/profile/user/`)
-      .set("Authorization", "Bearer " + test.body.token)
-      .query({ userid: "651b3a462edfb41fa6ba48e1" });
+      .get(`/user/6517c7d8d949e4b87f7b6b53/profile`)
+      .set("Authorization", "Bearer " + test.body.token);
     expect(data.body.user).toBeDefined();
   });
   it("should return messages array", async () => {
     const test = await request(app).post("/login").send(testUser);
     const data = await request(app)
-      .get(`/chat/user`)
-      .set("Authorization", "Bearer " + test.body.token)
-      .query({ userid: "651b3a462edfb41fa6ba48e1" });
-    expect(data.body.error).toBe("Clicked user or messages not found");
-    expect(404);
+      .get(`/user/651b3a462edfb41fa6ba48e1/chat`)
+      .set("Authorization", "Bearer " + test.body.token);
+    expect(data.body).toBeDefined();
+    expect(200);
   });
   it("should return new message", async () => {
     const test = await request(app).post("/login").send(testUser);
-    console.log("token " + test.body.token);
-
     const data = await request(app)
-      .post(`/chat/user`)
+      .post(`/user/651b3a462edfb41fa6ba48e1/chat`)
       .set("Authorization", "Bearer " + test.body.token)
       .query({ userid: "651b3a462edfb41fa6ba48e1" })
       .send({
         message: "Im there already.",
         recipient: "651b3a462edfb41fa6ba48e1",
       });
-    console.log(data.body);
     expect(data.body).toBeDefined();
     expect(200);
+  });
+  it("should update a message content", async () => {
+    const test = await request(app).post("/login").send(testUser);
+    const response = await request(app)
+      .put(`/user/651b3a462edfb41fa6ba48e1/chat`)
+      .set("Authorization", "Bearer " + test.body.token)
+      .send({
+        message: "Take your time Man",
+        messageId: "651bc2e5ff87ebc66275a4e4",
+      });
+    expect(response.status).toBe(200);
+    expect(response.body.Message).toBeDefined();
+  });
+  it("should delete a message", async () => {
+    const test = await request(app).post("/login").send(testUser);
+    const response = await request(app)
+      .delete(`/user/651b3a462edfb41fa6ba48e1/chat`)
+      .set("Authorization", "Bearer " + test.body.token)
+      .send({
+        messageId: "651bc2e5ff87ebc66275a4e4",
+      });
+    console.log(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body).toBeDefined();
   });
 });

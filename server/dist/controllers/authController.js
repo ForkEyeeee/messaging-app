@@ -28,7 +28,7 @@ exports.logInPost = (0, express_async_handler_1.default)(async (req, res, next) 
     passport_1.default.authenticate("login", async (err, user, info) => {
         try {
             if (err || !user) {
-                console.log(err);
+                console.error(err);
                 return res.status(400).json({ message: "Invalid credentials" });
             }
             req.login(user, { session: false }, async (error) => {

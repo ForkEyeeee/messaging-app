@@ -12,7 +12,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { FormEvent } from "react";
@@ -111,9 +111,8 @@ const Message = ({
     }
   };
 
-  const handleDelete = async (e: FormEvent<HTMLFormElement>) => {
+  const handleDelete = async () => {
     try {
-      e.preventDefault();
       const yourConfig = {
         headers: {
           Authorization: "Bearer " + token,
@@ -130,7 +129,10 @@ const Message = ({
       if (response.status !== 200) {
         throw new Error("Error logging in");
       } else {
-        console.log(response);
+        const updatedMessages: Message = messages.filter(
+          message => message._id !== messageId
+        );
+        setMessages(updatedMessages);
       }
     } catch (error) {
       console.error(error);
@@ -189,12 +191,8 @@ const Message = ({
             }
           >
             <HStack spacing={5}>
-              <form onSubmit={handleSubmit}>
-                <EditIcon onClick={handleEdit} />
-              </form>
-              <form onSubmit={handleDelete}>
-                <DeleteIcon />
-              </form>
+              <EditIcon onClick={handleEdit} />
+              <DeleteIcon onClick={handleDelete} />
             </HStack>
           </Flex>
         </PopoverContent>

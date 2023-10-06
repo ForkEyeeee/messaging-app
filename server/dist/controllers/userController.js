@@ -27,20 +27,20 @@ exports.getChatMessages = (0, express_async_handler_1.default)(async (req, res, 
         const currentUser = await user_1.default.findById({
             _id: userId,
         });
-        if (!clickedUser || !clickedUser.messages) {
+        if (clickedUser === null || clickedUser === null) {
             res.status(404).json({ error: "Clicked user or messages not found" });
         }
-        console.log("clickedUser " + clickedUser);
-        console.log("currentUser " + currentUser);
-        const messages = await message_1.default.find({
-            $or: [
-                { _id: { $in: currentUser.messages } },
-                { _id: { $in: clickedUser.messages } },
-            ],
-        }).sort({ time: 1 });
-        res.json({
-            messages: messages,
-        });
+        else {
+            const messages = await message_1.default.find({
+                $or: [
+                    { _id: { $in: currentUser.messages } },
+                    { _id: { $in: clickedUser.messages } },
+                ],
+            }).sort({ time: 1 });
+            res.json({
+                messages: messages,
+            });
+        }
     }
     catch (error) {
         console.error(error);
@@ -60,7 +60,6 @@ exports.postUserChatMessage = [
             try {
                 const { message, recipient } = req.body;
                 const usertoken = req.headers.authorization;
-                console.log("userId: " + usertoken);
                 const token = usertoken.split(" ");
                 const decoded = jsonwebtoken_1.default.verify(token[1], process.env.signature);
                 const userId = decoded.user._id;
@@ -92,8 +91,8 @@ exports.putUserChatMessage = [
         }
         else {
             try {
-                const { message, messageId } = req.body;
                 console.log("here");
+                const { message, messageId } = req.body;
                 const updatedMessage = await message_1.default.findOneAndUpdate({ _id: messageId }, { content: message });
                 updatedMessage.content = message;
                 res.json({ Message: updatedMessage });
