@@ -23,7 +23,7 @@ import { FormEvent } from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Link as ChakraLink } from "@chakra-ui/react";
 
-const Login = () => {
+const SignUp = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const location = useLocation().pathname;
@@ -33,9 +33,11 @@ const Login = () => {
       const formData = new FormData(e.currentTarget);
       const username = formData.get("username");
       const password = formData.get("password");
+      const confirmpassword = formData.get("confirmpassword");
       const userCredentials = {
         username: username,
         password: password,
+        confirmpassword: confirmpassword,
       };
       const response = await axios.post(
         `${import.meta.env.VITE_ENDPOINT}${location}`,
@@ -44,22 +46,7 @@ const Login = () => {
       if (response.status !== 200) {
         throw new Error("Error logging in");
       } else {
-        localStorage.setItem("jwt", response.data.token);
-        const token = response.data.token;
-        const yourConfig = {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        };
-        const data = await axios.get(
-          `${import.meta.env.VITE_ENDPOINT}/home`,
-          yourConfig
-        );
-        if (data.status !== 200) {
-          throw new Error("Error navigating to home");
-        } else {
-          navigate("/home");
-        }
+        navigate("/login");
       }
     } catch (error) {
       console.error(error);
@@ -72,7 +59,7 @@ const Login = () => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader textAlign={"center"} pb={1}>
-            Login
+            Sign Up
           </ModalHeader>
           <Text textAlign={"center"} fontSize={"16px"}>
             to continue to messaging app
@@ -98,13 +85,24 @@ const Login = () => {
                   maxLength={20}
                   required
                 />
+              </FormControl>
+              <FormControl isRequired={true}>
+                <FormLabel>Confirm password</FormLabel>
+                <Input
+                  type="password"
+                  name="confirmpassword"
+                  placeholder="Confirm your password"
+                  maxLength={20}
+                  required
+                />
                 <FormHelperText>
-                  Don't have an account?{" "}
+                  Already have an account?
                   <ChakraLink as={ReactRouterLink} to={`/signup`}>
-                    Sign Up here.
+                    {""} Login here.
                   </ChakraLink>
                 </FormHelperText>
               </FormControl>
+
               <ModalFooter>
                 <Button onClick={onClose} colorScheme={"blue"} type="submit">
                   Next
@@ -118,4 +116,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
