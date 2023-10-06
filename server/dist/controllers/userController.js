@@ -31,10 +31,18 @@ exports.getChatMessages = (0, express_async_handler_1.default)(async (req, res, 
             res.status(404).json({ error: "Clicked user or messages not found" });
         }
         else {
+            console.log(userId);
+            console.log(clickedUser._id.toString());
             const messages = await message_1.default.find({
                 $or: [
-                    { _id: { $in: currentUser.messages } },
-                    { _id: { $in: clickedUser.messages } },
+                    {
+                        sender: userId,
+                        recipient: clickedUser._id.toString(),
+                    },
+                    {
+                        sender: clickedUser._id.toString(),
+                        recipient: userId,
+                    },
                 ],
             }).sort({ time: 1 });
             res.json({

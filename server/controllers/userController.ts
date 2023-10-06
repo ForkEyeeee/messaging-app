@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import Message from "../models/message";
 import { Date } from "mongoose";
+import mongoose from "mongoose";
 
 export const getUserProfile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -63,10 +64,18 @@ export const getChatMessages = asyncHandler(
       if (clickedUser === null || clickedUser === null) {
         res.status(404).json({ error: "Clicked user or messages not found" });
       } else {
+        console.log(userId);
+        console.log(clickedUser._id.toString());
         const messages = await Message.find({
           $or: [
-            { _id: { $in: currentUser!.messages } },
-            { _id: { $in: clickedUser!.messages } },
+            {
+              sender: userId,
+              recipient: clickedUser._id.toString(),
+            },
+            {
+              sender: clickedUser._id.toString(),
+              recipient: userId,
+            },
           ],
         }).sort({ time: 1 });
         res.json({

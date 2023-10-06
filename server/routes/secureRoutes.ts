@@ -14,7 +14,7 @@ router.get("/home", getHomePage);
 router.get("/user/:userid/profile", getUserProfile);
 router.get("/user/:userid/chat", getChatMessages);
 router.post("/user/:userid/chat", postUserChatMessage);
-router.put("/user/:userid/chat/", putUserChatMessage);
-router.delete("/user/:userid/chat/", deleteUserChatMessage);
+router.put("/user/:userid/chat", putUserChatMessage);
+router.delete("/user/:userid/chat", deleteUserChatMessage);
 
 export default router;
