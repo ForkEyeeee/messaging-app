@@ -14,7 +14,7 @@ const NavBar = () => {
   const token = localStorage.getItem("jwt");
   const parsedToken = parseJwt(token);
   const isExpiredUser = validateToken(parsedToken);
-
+  console.log(parsedToken);
   useEffect(() => {
     if (!isExpiredUser && parsedToken) {
       localStorage.removeItem("jwt");
@@ -43,14 +43,23 @@ const NavBar = () => {
             </ChakraLink>
           </>
         ) : (
-          <ChakraLink
-            onClick={() => {
-              localStorage.removeItem("jwt");
-              navigate("/login");
-            }}
-          >
-            Logout
-          </ChakraLink>
+          <>
+            <ChakraLink
+              onClick={() => {
+                localStorage.removeItem("jwt");
+                navigate("/login");
+              }}
+            >
+              Logout
+            </ChakraLink>
+            <ChakraLink
+              onClick={() => {
+                navigate(`/user/${parsedToken.user._id}/profile`);
+              }}
+            >
+              Profile
+            </ChakraLink>
+          </>
         )}
         <SideBar data-testid="hamburger-icon" />
       </HStack>

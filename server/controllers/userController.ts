@@ -169,3 +169,42 @@ export const deleteUserChatMessage = asyncHandler(
     }
   }
 );
+
+export const updateUserProfile = [
+  body("firstName", "Firstname must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("lastName", "Lastname must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("about", "About must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("phone", "Phone must not be empty").trim().isLength({ min: 1 }).escape(),
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+    } else {
+      try {
+        const { firstName, lastName, about, phone } = req.body;
+        const usertoken: any = req.headers.authorization;
+
+        const token = usertoken.split(" ");
+        const decoded: Decoded | string | JwtPayload = jwt.verify(
+          token[1],
+          process.env.signature as any
+        );
+        const userId: any = (<any>decoded).user._id;
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: userId },
+          { firstname: firstName, lastname: lastName, about, phone },
+          { new: true }
+        );
+        res.json({ user: updatedUser });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }),
+];

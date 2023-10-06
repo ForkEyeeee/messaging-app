@@ -13,4 +13,5 @@ router.get("/user/:userid/chat", userController_1.getChatMessages);
 router.post("/user/:userid/chat", userController_1.postUserChatMessage);
 router.put("/user/:userid/chat", userController_1.putUserChatMessage);
 router.delete("/user/:userid/chat", userController_1.deleteUserChatMessage);
+router.put("/user/:userid/profile", userController_1.updateUserProfile);
 exports.default = router;
