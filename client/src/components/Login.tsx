@@ -24,12 +24,24 @@ import { FormEvent } from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import { useState } from "react";
+import validateToken from "./utils/validateToken";
+import parseJwt from "./utils/parseJWT";
 
 const Login = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [formError, setFormError] = useState("");
   const navigate = useNavigate();
   const location = useLocation().pathname;
+  const token = localStorage.getItem("jwt");
+  const parsedToken = parseJwt(token);
+  const isExpiredUser = validateToken(parsedToken);
+
+  useEffect(() => {
+    if (isExpiredUser && parsedToken) {
+      navigate("/home");
+    }
+  }, [isExpiredUser, parsedToken, navigate]);
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
@@ -54,8 +66,6 @@ const Login = () => {
       }
     }
   };
-
-  useEffect(() => {}, []);
 
   return (
     <Box bg={"gray"}>
