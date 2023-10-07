@@ -1,13 +1,13 @@
-import { Box, HStack, Heading } from "@chakra-ui/react";
+import { Box, HStack, Link as ChakraLink } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from "react-router-dom";
-import { Link as ChakraLink } from "@chakra-ui/react";
 import { AiFillHome } from "react-icons/ai";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import parseJwt from "./utils/parseJWT";
 import validateToken from "./utils/validateToken";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import SideBar from "./SideBar";
+
 const NavBar = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("jwt");
@@ -22,47 +22,49 @@ const NavBar = () => {
   }, [isExpiredUser, navigate, parsedToken]);
 
   return (
-    <Box p={5} fontFamily={"inter"} fontSize={{ base: 16, sm: 24 }}>
-      <HStack justifyContent="space-between">
-        <ChakraLink as={ReactRouterLink} to={`/home`}>
-          <AiFillHome />
-        </ChakraLink>
+    <>
+      {isExpiredUser && parsedToken && (
+        <Box p={5} fontFamily={"inter"} fontSize={{ base: 16, sm: 24 }}>
+          <HStack justifyContent="space-between">
+            <ChakraLink as={ReactRouterLink} to={`/home`}>
+              <AiFillHome />
+            </ChakraLink>
 
-        {/* <Heading fontSize={{ base: 15 }}>Messaging App</Heading> */}
-
-        {parsedToken === undefined &&
-        !isExpiredUser &&
-        isExpiredUser === undefined ? (
-          <>
-            <ChakraLink as={ReactRouterLink} to={`/signup`}>
-              Sign Up
-            </ChakraLink>
-            <ChakraLink as={ReactRouterLink} to={`/login`}>
-              Login
-            </ChakraLink>
-          </>
-        ) : (
-          <>
-            <ChakraLink
-              onClick={() => {
-                localStorage.removeItem("jwt");
-                navigate("/login");
-              }}
-            >
-              Logout
-            </ChakraLink>
-            <ChakraLink
-              onClick={() => {
-                navigate(`/user/${parsedToken.user._id}/profile`);
-              }}
-            >
-              Profile
-            </ChakraLink>
-          </>
-        )}
-        <SideBar data-testid="hamburger-icon" />
-      </HStack>
-    </Box>
+            {parsedToken === undefined &&
+            !isExpiredUser &&
+            isExpiredUser === undefined ? (
+              <>
+                <ChakraLink as={ReactRouterLink} to={`/signup`}>
+                  Sign Up
+                </ChakraLink>
+                <ChakraLink as={ReactRouterLink} to={`/login`}>
+                  Login
+                </ChakraLink>
+              </>
+            ) : (
+              <>
+                <ChakraLink
+                  onClick={() => {
+                    localStorage.removeItem("jwt");
+                    navigate("/login");
+                  }}
+                >
+                  Logout
+                </ChakraLink>
+                <ChakraLink
+                  onClick={() => {
+                    navigate(`/user/${parsedToken.user._id}/profile`);
+                  }}
+                >
+                  Profile
+                </ChakraLink>
+              </>
+            )}
+            <SideBar data-testid="hamburger-icon" />
+          </HStack>
+        </Box>
+      )}
+    </>
   );
 };
 

@@ -64,7 +64,7 @@ const SignUp = () => {
   return (
     <Box bg={"gray"}>
       <Modal onClose={onClose} isOpen={true} isCentered>
-        <ModalOverlay />
+        <ModalOverlay bg="blackAlpha.800" />
         <ModalContent>
           <ModalHeader textAlign={"center"} pb={1}>
             Sign Up
