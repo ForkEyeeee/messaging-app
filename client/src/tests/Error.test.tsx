@@ -1,18 +1,16 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Home from "../components/Home";
+import Error from "../components/Error";
 import { BrowserRouter } from "react-router-dom";
 
-describe("Home", () => {
-  it("renders Home Component", () => {
+describe("Error", () => {
+  it("renders Error Component", () => {
     render(
       <BrowserRouter>
-        <Home />
+        <Error />
       </BrowserRouter>
     );
-    const text = screen.getByText(
-      "Please open the sidebar to start messaging."
-    );
+    const text = screen.getByText("Oops! Page not found.");
     expect(text).toBeInTheDocument();
   });
 });

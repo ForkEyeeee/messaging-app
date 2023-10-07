@@ -13,7 +13,7 @@ describe("Login", () => {
       </BrowserRouter>
     );
     const loginText = screen.getByText("Login");
-    const signUpText = screen.getByText("Don't have an account? Sign Up here.");
+    const signUpText = screen.getByText("Don't have an account?");
     const button = screen.getByRole("button");
     expect(loginText).toBeInTheDocument();
     expect(signUpText).toBeInTheDocument();
@@ -31,6 +31,5 @@ describe("Login", () => {
     expect(button).toHaveAttribute("type", "submit");
     expect(vi.isMockFunction(handleClick)).toBe(true);
     expect(handleClick.mock.calls[0]).toEqual(["hello", 1]);
-    //screen.debug()
   });
 });

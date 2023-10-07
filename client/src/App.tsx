@@ -7,7 +7,9 @@ import SignUp from "./components/SignUp";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
 import Chat from "./components/Chat";
+
 import "./styles.css";
+import Error from "./components/Error";
 
 const App = () => {
   return (
@@ -18,12 +20,10 @@ const App = () => {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-
           <Route path="/home" element={<Home />} />
           <Route path="/user/:userid/profile" element={<Profile />} />
           <Route path="/user/:userid/chat" element={<Chat />} />
-
-          {/* <Route path="*" element={<Navigate to="/" />} /> */}
+          <Route path="*" element={<Error />} />
         </Routes>
       </Box>
       <Footer />

@@ -17,7 +17,7 @@ import {
   FormHelperText,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import React, { FormEventHandler } from "react";
+import React, { FormEventHandler, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import { FormEvent } from "react";
@@ -54,6 +54,8 @@ const Login = () => {
       }
     }
   };
+
+  useEffect(() => {}, []);
 
   return (
     <Box bg={"gray"}>

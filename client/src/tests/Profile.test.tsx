@@ -10,6 +10,6 @@ describe("Profile", () => {
         <Profile />
       </BrowserRouter>
     );
-    expect(screen.getByText("Account Details")).toBeInTheDocument();
+    expect(await screen.getByText("Customize Profile")).toBeInTheDocument();
   });
 });

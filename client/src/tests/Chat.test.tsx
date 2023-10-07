@@ -4,13 +4,13 @@ import Chat from "../components/Chat";
 import { BrowserRouter } from "react-router-dom";
 
 describe("Chat", () => {
-  it("renders Chat Component", () => {
+  it("renders Chat Component", async () => {
     render(
       <BrowserRouter>
         <Chat />
       </BrowserRouter>
     );
-    const input = screen.getByRole("chat-input");
+    const input = await screen.findByRole("chat-input");
     expect(input).toBeInTheDocument();
   });
 });

@@ -22,7 +22,7 @@ const NavBar = () => {
   }, [isExpiredUser, navigate, parsedToken]);
 
   return (
-    <>
+    <Box data-testid="navbar-container">
       {isExpiredUser && parsedToken && (
         <Box p={5} fontFamily={"inter"} fontSize={{ base: 16, sm: 24 }}>
           <HStack justifyContent="space-between">
@@ -64,7 +64,7 @@ const NavBar = () => {
           </HStack>
         </Box>
       )}
-    </>
+    </Box>
   );
 };
 
