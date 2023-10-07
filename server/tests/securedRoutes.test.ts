@@ -103,7 +103,6 @@ describe("Navigate to Home Page", () => {
       .send({
         messageId: "651bc2e5ff87ebc66275a4e4",
       });
-    console.log(response.body);
     expect(response.status).toBe(200);
     expect(response.body).toBeDefined();
   });
