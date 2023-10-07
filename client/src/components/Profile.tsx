@@ -15,7 +15,9 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
-
+import parseJwt from "./utils/parseJWT";
+import validateToken from "./utils/validateToken";
+import { parse } from "path";
 interface User {
   messages: [];
   _id: string;
@@ -43,11 +45,13 @@ const Profile = () => {
   const [isEdit, setIsEdit] = useState(false);
 
   const location = useLocation().pathname;
+  const token = localStorage.getItem("jwt");
+  const parsedToken = parseJwt(token);
+  const isExpiredUser = validateToken(parsedToken);
 
   useEffect(() => {
     const getUsers = async () => {
       try {
-        const token = localStorage.getItem("jwt");
         const response = await axios.get(
           `${import.meta.env.VITE_ENDPOINT}${location}`,
           {
@@ -110,7 +114,7 @@ const Profile = () => {
       console.error(error);
     }
   };
-
+  console.log(parsedToken);
   return (
     <Box>
       <HStack justifyContent={"center"} p={5}>
@@ -165,7 +169,9 @@ const Profile = () => {
               <Text>{profile.lastname}</Text>
               <Text>{profile.about}</Text>
               <Text>{profile.phone}</Text>
-              <Button onClick={handleEdit}>Edit</Button>
+              {parsedToken.user._id === profile._id && (
+                <Button onClick={handleEdit}>Edit</Button>
+              )}
             </>
           )}
         </VStack>

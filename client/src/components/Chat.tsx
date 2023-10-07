@@ -5,6 +5,8 @@ import {
   FormControl,
   InputGroup,
   InputRightElement,
+  Heading,
+  HStack,
 } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -13,6 +15,8 @@ import parseJwt from "./utils/parseJWT";
 import Message from "./Message";
 import { FormEvent } from "react";
 import { BsFillSendFill } from "react-icons/bs";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserCircle } from "@fortawesome/fontawesome-free-solid";
 
 interface MessageState {
   _id: string;
@@ -22,12 +26,18 @@ interface MessageState {
   time: Date;
 }
 
+interface Recipient {
+  firstName: string;
+  lastName: string;
+  userName: string;
+}
+
 const Chat = () => {
   const [messages, setMessages] = useState<MessageState[]>([]);
   const [inputText, setInputText] = useState("");
   const [openMessageId, setOpenMessageId] = useState<string | null>(null);
-
-  const recipient = `${useLocation().pathname}`.split("/")[2];
+  const [recipient, setRecipent] = useState<Recipient>();
+  const recipientId = `${useLocation().pathname}`.split("/")[2];
   const location = useLocation().pathname;
   const token = localStorage.getItem("jwt");
 
@@ -41,7 +51,7 @@ const Chat = () => {
       const message = formData.get("message");
       const messageData = {
         message,
-        recipient: recipient,
+        recipient: recipientId,
       };
       const yourConfig = {
         headers: {
@@ -78,7 +88,9 @@ const Chat = () => {
         if (response.status !== 200) {
           throw new Error("Error getting users");
         } else {
+          console.log(response);
           setMessages(response.data.messages);
+          setRecipent(response.data.recipient);
         }
       } catch (error) {
         console.error(error);
@@ -89,6 +101,16 @@ const Chat = () => {
   return (
     //sort and render msgs by time
     <Box flex="1" display="flex" flexDirection="column" h="100vh">
+      <HStack justifyContent={"space-between"} p={2}>
+        <FontAwesomeIcon
+          icon={faUserCircle as any}
+          style={{ color: "#808080" }}
+          size="2x"
+        />
+        <Heading color={"white"}>
+          {recipient?.firstName} {recipient?.lastName}{" "}
+        </Heading>
+      </HStack>
       <VStack flex="1" overflowY="scroll">
         {messages &&
           messages.map((message: Message) => (

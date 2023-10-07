@@ -145,7 +145,7 @@ const Message = ({
       <Flex justifyContent={justifyContent} w={"100%"}>
         <PopoverTrigger>
           <Card maxW={"75%"} bg={backGround} role="message-card">
-            <CardBody>
+            <CardBody pb={isOpen ? 0 : undefined}>
               {!isOpen ? (
                 <Text fontSize={"16px"} color={color}>
                   {inputText === "" ? content : inputText}{" "}
@@ -156,7 +156,6 @@ const Message = ({
                     <Input
                       type="text"
                       size="lg"
-                      // variant="flushed"
                       name="message"
                       placeholder="Message User"
                       onChange={handleInputOnChange}
@@ -164,9 +163,13 @@ const Message = ({
                       maxLength={200}
                       required
                     />
-                    <HStack>
-                      <button type="submit">Save</button>
-                      <button onClick={handleEdit}>Cancel</button>
+                    <HStack justifyContent={"flex-end"}>
+                      <Button variant={"ghost"} type="submit" p={0}>
+                        Save
+                      </Button>
+                      <Button variant={"ghost"} onClick={handleEdit} p={0}>
+                        Cancel
+                      </Button>
                     </HStack>
                   </FormControl>
                 </form>
@@ -176,23 +179,16 @@ const Message = ({
         </PopoverTrigger>
       </Flex>
       {/* </Box> */}
-      {!isSender && (
+      {!isSender && !isOpen && (
         <PopoverContent w={"fit-content"}>
-          {/* <PopoverHeader fontWeight="semibold">Popover placement</PopoverHeader>
-        <PopoverArrow />
-        <PopoverCloseButton />
-        <PopoverBody>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore.
-        </PopoverBody> */}
           <Flex
             justifyContent={
               popOverPlacement === "left" ? "flex-end" : "flex-start"
             }
           >
-            <HStack spacing={5}>
+            <HStack spacing={5} p={1}>
               <EditIcon onClick={handleEdit} />
-              <DeleteIcon onClick={handleDelete} />
+              <DeleteIcon onClick={handleDelete} color={"red"} />
             </HStack>
           </Flex>
         </PopoverContent>

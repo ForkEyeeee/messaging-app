@@ -26,6 +26,10 @@ interface User {
   _id: string;
   username: string;
   password: string;
+  firstname: string;
+  lastname: string;
+  about: string;
+  phone: string;
   __v: number;
 }
 
@@ -76,14 +80,16 @@ const SideBar = () => {
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth="1px">Users</DrawerHeader>
           <DrawerBody>
-            <Box>
+            <VStack borderStyle={"solid"} spacing={10}>
               {users &&
                 users.map(user => (
                   <SideBarItem key={user._id} url={user._id}>
                     {user.username}
+                    {user.firstname}
+                    {user.lastname}
                   </SideBarItem>
                 ))}
-            </Box>
+            </VStack>
           </DrawerBody>
         </DrawerContent>
       </Drawer>

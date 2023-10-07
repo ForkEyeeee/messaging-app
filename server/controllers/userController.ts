@@ -12,6 +12,7 @@ import mongoose from "mongoose";
 export const getUserProfile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findOne({ _id: req.params.userid });
+    console.log(req.params.userid);
     res.json({ user: user });
   }
 );
@@ -64,8 +65,6 @@ export const getChatMessages = asyncHandler(
       if (clickedUser === null || clickedUser === null) {
         res.status(404).json({ error: "Clicked user or messages not found" });
       } else {
-        console.log(userId);
-        console.log(clickedUser._id.toString());
         const messages = await Message.find({
           $or: [
             {
@@ -78,8 +77,14 @@ export const getChatMessages = asyncHandler(
             },
           ],
         }).sort({ time: 1 });
+        const recipient = {
+          firstName: clickedUser.firstname,
+          lastName: clickedUser.lastname,
+          userName: clickedUser.username,
+        };
         res.json({
           messages: messages,
+          recipient: recipient,
         });
       }
     } catch (error) {
@@ -139,7 +144,6 @@ export const putUserChatMessage = [
       res.status(400).json({ errors: errors.array() });
     } else {
       try {
-        console.log("here");
         const { message, messageId } = req.body;
         const updatedMessage: Message | null = await Message.findOneAndUpdate(
           { _id: messageId },
@@ -188,6 +192,7 @@ export const updateUserProfile = [
     } else {
       try {
         const { firstName, lastName, about, phone } = req.body;
+        console.log(req.body);
         const usertoken: any = req.headers.authorization;
 
         const token = usertoken.split(" ");
@@ -196,11 +201,13 @@ export const updateUserProfile = [
           process.env.signature as any
         );
         const userId: any = (<any>decoded).user._id;
+        console.log(userId);
         const updatedUser = await User.findOneAndUpdate(
-          { _id: userId },
+          { _id: userId }, //req.params.id
           { firstname: firstName, lastname: lastName, about, phone },
           { new: true }
         );
+        console.log(updatedUser);
         res.json({ user: updatedUser });
       } catch (error) {
         console.error(error);

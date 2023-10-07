@@ -72,7 +72,7 @@ const SignUp = () => {
                   type="text"
                   name="username"
                   placeholder="Enter your name"
-                  maxLength={50}
+                  maxLength={20}
                   required
                 />
               </FormControl>

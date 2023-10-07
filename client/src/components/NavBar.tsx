@@ -14,7 +14,7 @@ const NavBar = () => {
   const token = localStorage.getItem("jwt");
   const parsedToken = parseJwt(token);
   const isExpiredUser = validateToken(parsedToken);
-  console.log(parsedToken);
+
   useEffect(() => {
     if (!isExpiredUser && parsedToken) {
       localStorage.removeItem("jwt");
@@ -29,7 +29,7 @@ const NavBar = () => {
           <AiFillHome />
         </ChakraLink>
 
-        <Heading fontSize={{ base: 20 }}>Messaging App</Heading>
+        {/* <Heading fontSize={{ base: 15 }}>Messaging App</Heading> */}
 
         {parsedToken === undefined &&
         !isExpiredUser &&
