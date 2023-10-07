@@ -13,7 +13,6 @@ dotenv_1.default.config();
 const message_1 = __importDefault(require("../models/message"));
 exports.getUserProfile = (0, express_async_handler_1.default)(async (req, res, next) => {
     const user = await user_1.default.findOne({ _id: req.params.userid });
-    console.log(req.params.userid);
     res.json({ user: user });
 });
 exports.getChatMessages = (0, express_async_handler_1.default)(async (req, res, next) => {
@@ -145,15 +144,12 @@ exports.updateUserProfile = [
         else {
             try {
                 const { firstName, lastName, about, phone } = req.body;
-                console.log(req.body);
                 const usertoken = req.headers.authorization;
                 const token = usertoken.split(" ");
                 const decoded = jsonwebtoken_1.default.verify(token[1], process.env.signature);
                 const userId = decoded.user._id;
-                console.log(userId);
                 const updatedUser = await user_1.default.findOneAndUpdate({ _id: userId }, //req.params.id
                 { firstname: firstName, lastname: lastName, about, phone }, { new: true });
-                console.log(updatedUser);
                 res.json({ user: updatedUser });
             }
             catch (error) {

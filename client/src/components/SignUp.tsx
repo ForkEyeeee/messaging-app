@@ -15,6 +15,7 @@ import {
   FormLabel,
   Input,
   FormHelperText,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import React, { FormEventHandler } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -22,9 +23,12 @@ import axios from "axios";
 import { FormEvent } from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Link as ChakraLink } from "@chakra-ui/react";
+import { useState } from "react";
 
 const SignUp = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [formError, setFormError] = useState("");
+
   const navigate = useNavigate();
   const location = useLocation().pathname;
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -48,25 +52,33 @@ const SignUp = () => {
       } else {
         navigate("/login");
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      if (error.response.status === 400) {
+        setFormError(error.response.data.message);
+      } else {
+        setFormError("Error Signing Up");
+      }
     }
   };
 
   return (
-    <Box bg={"gray"} className="test">
+    <Box bg={"gray"}>
       <Modal onClose={onClose} isOpen={true} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader textAlign={"center"} pb={1}>
             Sign Up
           </ModalHeader>
-          <Text textAlign={"center"} fontSize={"16px"}>
-            to continue to messaging app
+          <Text textAlign={"center"} fontSize={"16px"} mb={3}>
+            to continue to login
           </Text>
           <ModalBody>
             <form onSubmit={handleSubmit}>
-              <FormControl isRequired={true}>
+              <FormControl
+                isRequired={true}
+                mb={3}
+                isInvalid={formError !== ""}
+              >
                 <FormLabel>Name</FormLabel>
                 <Input
                   type="text"
@@ -76,7 +88,11 @@ const SignUp = () => {
                   required
                 />
               </FormControl>
-              <FormControl isRequired={true}>
+              <FormControl
+                isRequired={true}
+                mb={3}
+                isInvalid={formError !== ""}
+              >
                 <FormLabel>Password</FormLabel>
                 <Input
                   type="password"
@@ -86,7 +102,11 @@ const SignUp = () => {
                   required
                 />
               </FormControl>
-              <FormControl isRequired={true}>
+              <FormControl
+                isRequired={true}
+                mb={3}
+                isInvalid={formError !== ""}
+              >
                 <FormLabel>Confirm password</FormLabel>
                 <Input
                   type="password"
@@ -95,15 +115,22 @@ const SignUp = () => {
                   maxLength={20}
                   required
                 />
-                <FormHelperText>
+                <FormHelperText mt={2}>
                   Already have an account?
-                  <ChakraLink as={ReactRouterLink} to={`/signup`}>
-                    {""} Login here.
+                  <ChakraLink
+                    color={"#0000FF"}
+                    as={ReactRouterLink}
+                    to={`/login`}
+                    ml={1}
+                  >
+                    Login here.
                   </ChakraLink>
                 </FormHelperText>
+                <FormErrorMessage>
+                  {formError !== "" && formError}
+                </FormErrorMessage>
               </FormControl>
-
-              <ModalFooter>
+              <ModalFooter pt={0}>
                 <Button onClick={onClose} colorScheme={"blue"} type="submit">
                   Next
                 </Button>

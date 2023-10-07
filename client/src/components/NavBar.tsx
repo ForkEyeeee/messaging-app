@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 
 import SideBar from "./SideBar";
 const NavBar = () => {
-  const location = `${import.meta.env.VITE_ENDPOINT$}${useLocation().pathname}`;
   const navigate = useNavigate();
   const token = localStorage.getItem("jwt");
   const parsedToken = parseJwt(token);
@@ -23,7 +22,7 @@ const NavBar = () => {
   }, [isExpiredUser, navigate, parsedToken]);
 
   return (
-    <Box p={5} fontFamily={"inter"} fontSize={16}>
+    <Box p={5} fontFamily={"inter"} fontSize={{ base: 16, sm: 24 }}>
       <HStack justifyContent="space-between">
         <ChakraLink as={ReactRouterLink} to={`/home`}>
           <AiFillHome />

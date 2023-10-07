@@ -90,8 +90,6 @@ const Message = ({
       if (response.status !== 200) {
         throw new Error("Error logging in");
       } else {
-        console.log(response);
-
         const updatedMessages = messages;
         const oldMessage = updatedMessages.find(
           (message: Message) => message._id === response.data.Message._id
@@ -147,8 +145,8 @@ const Message = ({
           <Card maxW={"75%"} bg={backGround} role="message-card">
             <CardBody pb={isOpen ? 0 : undefined}>
               {!isOpen ? (
-                <Text fontSize={"16px"} color={color}>
-                  {inputText === "" ? content : inputText}{" "}
+                <Text fontSize={{ base: "16px", sm: "20px" }} color={color}>
+                  {inputText === "" ? content : inputText}
                 </Text>
               ) : (
                 <form onSubmit={handleSubmit}>

@@ -1,4 +1,4 @@
-const parseJwt = (tokenData: any) => {
+const parseJwt = (tokenData: string | null) => {
   if (typeof tokenData === "undefined" || tokenData === null) {
     return;
   }

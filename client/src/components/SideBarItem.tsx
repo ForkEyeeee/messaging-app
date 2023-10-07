@@ -6,30 +6,47 @@ import { faUserCircle } from "@fortawesome/fontawesome-free-solid";
 const SideBarItem = ({
   children,
   url,
+  onClose,
 }: {
   children: string[];
   url: string;
+  onClose: () => void;
 }) => {
-  console.log(children);
   return (
     <HStack justifyContent={"space-between"} w={"100%"}>
-      <ChakraLink as={ReactRouterLink} to={`/user/${url}/chat`}>
+      <ChakraLink
+        as={ReactRouterLink}
+        to={`/user/${url}/chat`}
+        onClick={onClose}
+      >
         <Flex flexDir={"column"}>
-          <Text fontWeight={"bold"}>{children[0]}</Text>
-          <Text>
+          <Text fontWeight={"bold"} fontSize={{ sm: 18 }}>
+            {children[0]}
+          </Text>
+          <Text fontSize={{ base: 14, sm: 18 }} noOfLines={1}>
             {children[1]} {children[2]}
           </Text>
-          <Text fontStyle={"italic"}>Click to Chat</Text>
+          <Text
+            fontStyle={"italic"}
+            fontSize={{ sm: 20 }}
+            textDecor={"underline"}
+          >
+            Click to Chat
+          </Text>
         </Flex>
       </ChakraLink>
-      <ChakraLink as={ReactRouterLink} to={`/user/${url}/profile`}>
+      <ChakraLink
+        as={ReactRouterLink}
+        to={`/user/${url}/profile`}
+        onClick={onClose}
+      >
         <VStack justifyContent={"flex-end"}>
           <FontAwesomeIcon
             icon={faUserCircle as any}
             style={{ color: "#808080" }}
             size="3x"
           />
-          <Text fontSize={13}>View Profile</Text>
+          <Text fontSize={{ base: 10, sm: 14 }}>View Profile</Text>
         </VStack>
       </ChakraLink>
     </HStack>

@@ -1,3 +1,4 @@
+import { Spinner, Center } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/fontawesome-free-solid";
 import { useEffect, useState } from "react";
@@ -13,11 +14,13 @@ import {
   FormControl,
   FormLabel,
   Textarea,
+  Card,
+  CardBody,
+  Flex,
 } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import parseJwt from "./utils/parseJWT";
-import validateToken from "./utils/validateToken";
-import { parse } from "path";
+
 interface User {
   messages: [];
   _id: string;
@@ -43,138 +46,155 @@ const Profile = () => {
     __v: 0,
   });
   const [isEdit, setIsEdit] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   const location = useLocation().pathname;
   const token = localStorage.getItem("jwt");
   const parsedToken = parseJwt(token);
-  const isExpiredUser = validateToken(parsedToken);
 
   useEffect(() => {
     const getUsers = async () => {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_ENDPOINT}${location}`,
-          {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          }
+          { headers: { Authorization: "Bearer " + token } }
         );
-        if (response.status !== 200) {
-          throw new Error("Error getting users");
-        } else {
-          setProfile(response.data.user);
-          console.log(response);
-        }
+        setProfile(response.data.user);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
     getUsers();
-  }, [location, setProfile]);
+  }, [location, setProfile, token]);
 
   const handleEdit = () => {
     setIsEdit(prevState => !prevState);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault();
-      const formData = new FormData(e.currentTarget);
-      const firstName = formData.get("firstname");
-      const lastName = formData.get("lastname");
-      const about = formData.get("about");
-      const phone = formData.get("phone");
-      const token = localStorage.getItem("jwt");
-
-      const profileData = {
-        firstName,
-        lastName,
-        about,
-        phone,
-      };
-      const yourConfig = {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      };
-      const response = await axios.put(
-        `${import.meta.env.VITE_ENDPOINT}${location}`,
-        profileData,
-        yourConfig
-      );
-      if (response.status !== 200) {
-        throw new Error("Error updating profile");
-      } else {
-        console.log(response);
-        handleEdit();
-        setProfile(response.data.user);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const firstName = formData.get("firstname");
+    const lastName = formData.get("lastname");
+    const about = formData.get("about");
+    const phone = formData.get("phone");
+    const profileData = { firstName, lastName, about, phone };
+    const yourConfig = { headers: { Authorization: "Bearer " + token } };
+    const response = await axios.put(
+      `${import.meta.env.VITE_ENDPOINT}${location}`,
+      profileData,
+      yourConfig
+    );
+    handleEdit();
+    setProfile(response.data.user);
   };
-  console.log(parsedToken);
+
   return (
     <Box>
       <HStack justifyContent={"center"} p={5}>
-        <Heading>Customize Profile</Heading>
+        <Heading color={"white"}>Customize Profile</Heading>
       </HStack>
-      {profile && (
-        <VStack color={"white"}>
-          <FontAwesomeIcon
-            icon={faUserCircle as any}
-            style={{ color: "#808080" }}
-            size="3x"
+      {loading ? (
+        <Center p={10}>
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
           />
-          {isEdit ? (
-            <form onSubmit={handleSubmit}>
-              <FormControl>
-                <FormLabel>First Name</FormLabel>
-                <Input
-                  type="text"
-                  name="firstname"
-                  defaultValue={profile.firstname}
-                  required
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Last Name</FormLabel>
-                <Input
-                  type="text"
-                  name="lastname"
-                  defaultValue={profile.lastname}
-                  required
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>About</FormLabel>
-                <Textarea name="about" defaultValue={profile.about} required />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Phone</FormLabel>
-                <Input
-                  type="tel"
-                  name="phone"
-                  defaultValue={profile.phone}
-                  required
-                />
-              </FormControl>
-              <Button type="submit">Save</Button>
-            </form>
-          ) : (
-            <>
-              <Text>{profile.username}</Text>
-              <Text>{profile.firstname}</Text>
-              <Text>{profile.lastname}</Text>
-              <Text>{profile.about}</Text>
-              <Text>{profile.phone}</Text>
-              {parsedToken.user._id === profile._id && (
-                <Button onClick={handleEdit}>Edit</Button>
-              )}
-            </>
-          )}
-        </VStack>
+        </Center>
+      ) : (
+        profile && (
+          <VStack color={"white"}>
+            <Box p={2}>
+              <FontAwesomeIcon
+                icon={faUserCircle as any}
+                style={{ color: "#FFFFFF" }}
+                size="3x"
+              />
+            </Box>
+            {isEdit ? (
+              <form onSubmit={handleSubmit}>
+                <FormControl mb={4}>
+                  <FormLabel>First Name</FormLabel>
+                  <Input
+                    type="text"
+                    name="firstname"
+                    defaultValue={profile.firstname}
+                    required
+                  />
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel>Last Name</FormLabel>
+                  <Input
+                    type="text"
+                    name="lastname"
+                    defaultValue={profile.lastname}
+                    required
+                  />
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel>About</FormLabel>
+                  <Textarea
+                    name="about"
+                    defaultValue={profile.about}
+                    required
+                  />
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel>Phone</FormLabel>
+                  <Input
+                    type="tel"
+                    name="phone"
+                    defaultValue={profile.phone}
+                    required
+                  />
+                </FormControl>
+                <Flex justifyContent="center" p={5}>
+                  <Button type="submit" colorScheme="whatsapp">
+                    Save
+                  </Button>
+                </Flex>
+              </form>
+            ) : (
+              <>
+                <Card mb="4" p="4" bg="gray.300" borderRadius="md">
+                  <CardBody>
+                    <Text
+                      fontSize="xl"
+                      fontWeight="bold"
+                      color="gray.800"
+                      mb="2"
+                    >
+                      {profile.username}
+                    </Text>
+                    <Text fontSize="lg" color="gray.700" mb="2">
+                      {profile.firstname} {profile.lastname}
+                    </Text>
+                    <Text my="2" fontSize="md" color="gray.700" mb="2">
+                      {profile.about}
+                    </Text>
+                    <Text fontSize="md" color="gray.700" mb="2">
+                      {profile.phone}
+                    </Text>
+                    {parsedToken.user._id === profile._id && (
+                      <Button
+                        mt="2"
+                        colorScheme="blue"
+                        variant="solid"
+                        onClick={handleEdit}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                  </CardBody>
+                </Card>
+              </>
+            )}
+          </VStack>
+        )
       )}
     </Box>
   );

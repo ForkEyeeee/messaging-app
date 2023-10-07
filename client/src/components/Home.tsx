@@ -10,7 +10,7 @@ const Home = () => {
           No User Selected
         </Text>
         <Text fontSize="md" color="gray.400" mt="2">
-          Please select a user to start messaging.
+          Please open the sidebar to start messaging.
         </Text>
       </VStack>
     </AbsoluteCenter>

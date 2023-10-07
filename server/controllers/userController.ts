@@ -12,7 +12,6 @@ import mongoose from "mongoose";
 export const getUserProfile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findOne({ _id: req.params.userid });
-    console.log(req.params.userid);
     res.json({ user: user });
   }
 );
@@ -192,7 +191,6 @@ export const updateUserProfile = [
     } else {
       try {
         const { firstName, lastName, about, phone } = req.body;
-        console.log(req.body);
         const usertoken: any = req.headers.authorization;
 
         const token = usertoken.split(" ");
@@ -201,13 +199,11 @@ export const updateUserProfile = [
           process.env.signature as any
         );
         const userId: any = (<any>decoded).user._id;
-        console.log(userId);
         const updatedUser = await User.findOneAndUpdate(
           { _id: userId }, //req.params.id
           { firstname: firstName, lastname: lastName, about, phone },
           { new: true }
         );
-        console.log(updatedUser);
         res.json({ user: updatedUser });
       } catch (error) {
         console.error(error);

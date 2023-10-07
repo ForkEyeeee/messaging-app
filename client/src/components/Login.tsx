@@ -15,16 +15,19 @@ import {
   FormLabel,
   Input,
   FormHelperText,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import React, { FormEventHandler } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { FormEvent } from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Link as ChakraLink } from "@chakra-ui/react";
+import { useState } from "react";
 
 const Login = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [formError, setFormError] = useState("");
   const navigate = useNavigate();
   const location = useLocation().pathname;
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -41,33 +44,19 @@ const Login = () => {
         `${import.meta.env.VITE_ENDPOINT}${location}`,
         userCredentials
       );
-      if (response.status !== 200) {
-        throw new Error("Error logging in");
+      localStorage.setItem("jwt", response.data.token);
+      navigate("/home");
+    } catch (error: any) {
+      if (error.response.status === 400) {
+        setFormError(error.response.data.message);
       } else {
-        localStorage.setItem("jwt", response.data.token);
-        const token = response.data.token;
-        const yourConfig = {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        };
-        const data = await axios.get(
-          `${import.meta.env.VITE_ENDPOINT}/home`,
-          yourConfig
-        );
-        if (data.status !== 200) {
-          throw new Error("Error navigating to home");
-        } else {
-          navigate("/home");
-        }
+        setFormError("Error Logging In");
       }
-    } catch (error) {
-      console.error(error);
     }
   };
 
   return (
-    <Box bg={"gray"} className="test">
+    <Box bg={"gray"}>
       <Modal onClose={onClose} isOpen={true} isCentered>
         <ModalOverlay />
         <ModalContent>
@@ -79,7 +68,7 @@ const Login = () => {
           </Text>
           <ModalBody>
             <form onSubmit={handleSubmit}>
-              <FormControl isRequired={true}>
+              <FormControl isRequired={true} isInvalid={formError !== ""}>
                 <FormLabel>Name</FormLabel>
                 <Input
                   type="text"
@@ -89,7 +78,7 @@ const Login = () => {
                   required
                 />
               </FormControl>
-              <FormControl isRequired={true}>
+              <FormControl isRequired={true} isInvalid={formError !== ""}>
                 <FormLabel>Password</FormLabel>
                 <Input
                   type="password"
@@ -99,11 +88,18 @@ const Login = () => {
                   required
                 />
                 <FormHelperText>
-                  Don't have an account?{" "}
-                  <ChakraLink as={ReactRouterLink} to={`/signup`}>
+                  Don't have an account? {""}
+                  <ChakraLink
+                    color={"#0000FF"}
+                    as={ReactRouterLink}
+                    to={`/signup`}
+                  >
                     Sign Up here.
                   </ChakraLink>
                 </FormHelperText>
+                <FormErrorMessage>
+                  {formError !== "" && formError}
+                </FormErrorMessage>
               </FormControl>
               <ModalFooter>
                 <Button onClick={onClose} colorScheme={"blue"} type="submit">
