@@ -1,7 +1,8 @@
 #messaging-app
 userData.ts
 messageData.ts
-.json
+userData.json
+messageData.json
 
 # Logs
 logs
