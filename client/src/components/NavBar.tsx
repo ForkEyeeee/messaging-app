@@ -29,36 +29,27 @@ const NavBar = () => {
           </ChakraLink>
           {parsedToken === undefined &&
           !isExpiredUser &&
-          isExpiredUser === undefined ? (
-            <>
-              <ChakraLink as={ReactRouterLink} to={`/signup`}>
-                Sign Up
-              </ChakraLink>
-              <ChakraLink as={ReactRouterLink} to={`/login`}>
-                Login
-              </ChakraLink>
-            </>
-          ) : (
-            parsedToken && (
-              <>
-                <ChakraLink
-                  onClick={() => {
-                    localStorage.removeItem("jwt");
-                    navigate("/login");
-                  }}
-                >
-                  Logout
-                </ChakraLink>
-                <ChakraLink
-                  onClick={() => {
-                    navigate(`/user/${parsedToken.user._id}/profile`);
-                  }}
-                >
-                  Profile
-                </ChakraLink>
-              </>
-            )
-          )}
+          isExpiredUser === undefined
+            ? null
+            : parsedToken && (
+                <>
+                  <ChakraLink
+                    onClick={() => {
+                      localStorage.removeItem("jwt");
+                      navigate("/login");
+                    }}
+                  >
+                    Logout
+                  </ChakraLink>
+                  <ChakraLink
+                    onClick={() => {
+                      navigate(`/user/${parsedToken.user._id}/profile`);
+                    }}
+                  >
+                    Profile
+                  </ChakraLink>
+                </>
+              )}
           <SideBar data-testid="hamburger-icon" />
         </HStack>
       </Box>

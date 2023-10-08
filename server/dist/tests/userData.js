@@ -1,7 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = require("mongoose");
-var userData = [
+const mongoose_1 = __importDefault(require("mongoose"));
+const userData = [
     {
         _id: new mongoose_1.default.Types.ObjectId("6517c7d6d949e4b87f7b6b51"),
         username: "example@example.com",

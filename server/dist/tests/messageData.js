@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var messageData = [
+const messageData = [
     {
         _id: "651bc2e5ff87ebc66275a4e1",
         sender: "6517c7d6d949e4b87f7b6b51",
