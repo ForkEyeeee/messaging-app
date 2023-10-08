@@ -1,9 +1,7 @@
 #!/usr/bin/env node
-"use strict";
 /**
  * Module dependencies.
  */
-Object.defineProperty(exports, "__esModule", { value: true });
 var app = require("../app");
 var debug = require("debug")("wheres-waldo:server");
 var http = require("http");
