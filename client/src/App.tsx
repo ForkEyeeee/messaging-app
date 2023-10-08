@@ -7,8 +7,6 @@ import SignUp from "./components/SignUp";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
 import Chat from "./components/Chat";
-
-import "./styles.css";
 import Error from "./components/Error";
 
 const App = () => {
