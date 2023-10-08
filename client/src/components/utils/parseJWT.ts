@@ -1,5 +1,6 @@
 const parseJwt = (tokenData: string | null) => {
-  if (typeof tokenData === "undefined" || tokenData === null) {
+  if (tokenData === "undefined" || tokenData === null) {
+    localStorage.removeItem("jwt");
     return;
   }
   const base64Url = tokenData.split(".")[1];

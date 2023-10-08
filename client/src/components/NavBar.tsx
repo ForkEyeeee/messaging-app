@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import parseJwt from "./utils/parseJWT";
 import validateToken from "./utils/validateToken";
 import { useEffect } from "react";
-
 import SideBar from "./SideBar";
 
 const NavBar = () => {
@@ -23,25 +22,26 @@ const NavBar = () => {
 
   return (
     <Box data-testid="navbar-container">
-      {isExpiredUser && parsedToken && (
-        <Box p={5} fontFamily={"inter"} fontSize={{ base: 16, sm: 24 }}>
-          <HStack justifyContent="space-between">
+      <Box p={5} fontFamily={"inter"} fontSize={{ base: 16, sm: 24 }}>
+        <HStack justifyContent="space-between">
+          {!isExpiredUser && !parsedToken && (
             <ChakraLink as={ReactRouterLink} to={`/home`}>
               <AiFillHome />
             </ChakraLink>
-
-            {parsedToken === undefined &&
-            !isExpiredUser &&
-            isExpiredUser === undefined ? (
-              <>
-                <ChakraLink as={ReactRouterLink} to={`/signup`}>
-                  Sign Up
-                </ChakraLink>
-                <ChakraLink as={ReactRouterLink} to={`/login`}>
-                  Login
-                </ChakraLink>
-              </>
-            ) : (
+          )}
+          {parsedToken === undefined &&
+          !isExpiredUser &&
+          isExpiredUser === undefined ? (
+            <>
+              <ChakraLink as={ReactRouterLink} to={`/signup`}>
+                Sign Up
+              </ChakraLink>
+              <ChakraLink as={ReactRouterLink} to={`/login`}>
+                Login
+              </ChakraLink>
+            </>
+          ) : (
+            parsedToken && (
               <>
                 <ChakraLink
                   onClick={() => {
@@ -59,11 +59,11 @@ const NavBar = () => {
                   Profile
                 </ChakraLink>
               </>
-            )}
-            <SideBar data-testid="hamburger-icon" />
-          </HStack>
-        </Box>
-      )}
+            )
+          )}
+          <SideBar data-testid="hamburger-icon" />
+        </HStack>
+      </Box>
     </Box>
   );
 };
