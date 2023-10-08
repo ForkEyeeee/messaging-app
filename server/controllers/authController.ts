@@ -46,7 +46,6 @@ export const logInPost = asyncHandler(
       async (err: object, user: User, info: Info) => {
         try {
           if (err || !user) {
-            console.error(err);
             return res.status(400).json({ message: "Invalid credentials" });
           }
 

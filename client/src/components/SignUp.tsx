@@ -1,14 +1,12 @@
 import {
   Box,
   Text,
-  Heading,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useDisclosure,
   Button,
   FormControl,
@@ -17,16 +15,15 @@ import {
   FormHelperText,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import React, { FormEventHandler } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { FormEvent } from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import { useState } from "react";
 
 const SignUp = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onClose } = useDisclosure();
   const [formError, setFormError] = useState("");
 
   const navigate = useNavigate();
@@ -52,11 +49,18 @@ const SignUp = () => {
       } else {
         navigate("/login");
       }
-    } catch (error: any) {
-      if (error.response.status === 400) {
-        setFormError(error.response.data.message);
+    } catch (error: unknown) {
+      if (typeof error === "object" && error !== null && "response" in error) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response && axiosError.response.status === 400) {
+          const errorMessage = (axiosError.response.data as { message: string })
+            .message;
+          setFormError(errorMessage);
+        } else {
+          setFormError("Error Signing Up");
+        }
       } else {
-        setFormError("Error Signing Up");
+        setFormError("Unexpected error occurred");
       }
     }
   };

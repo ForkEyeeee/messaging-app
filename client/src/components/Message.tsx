@@ -16,6 +16,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { FormEvent } from "react";
+import { PlacementWithLogical } from "@chakra-ui/react";
 
 interface Message {
   _id: string;
@@ -30,7 +31,7 @@ interface Props {
   backGround: string;
   color: string;
   content: string;
-  popOverPlacement: any;
+  popOverPlacement: undefined | PlacementWithLogical;
   isSender: boolean;
   messages: Message[];
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
@@ -139,7 +140,6 @@ const Message = ({
 
   return (
     <Popover placement={popOverPlacement}>
-      {/* <Box> */}
       <Flex justifyContent={justifyContent} w={"100%"}>
         <PopoverTrigger>
           <Card maxW={"75%"} bg={backGround} role="message-card">
@@ -176,7 +176,6 @@ const Message = ({
           </Card>
         </PopoverTrigger>
       </Flex>
-      {/* </Box> */}
       {!isSender && !isOpen && (
         <PopoverContent w={"fit-content"}>
           <Flex

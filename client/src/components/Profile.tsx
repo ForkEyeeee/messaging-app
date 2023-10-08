@@ -1,5 +1,5 @@
-import { Spinner, Center } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { faUserCircle } from "@fortawesome/fontawesome-free-solid";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -17,6 +17,8 @@ import {
   Card,
   CardBody,
   Flex,
+  Spinner,
+  Center,
 } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import parseJwt from "./utils/parseJWT";
@@ -110,7 +112,7 @@ const Profile = () => {
           <VStack color={"white"}>
             <Box p={2}>
               <FontAwesomeIcon
-                icon={faUserCircle as any}
+                icon={faUserCircle as IconDefinition}
                 style={{ color: "#FFFFFF" }}
                 size="3x"
               />

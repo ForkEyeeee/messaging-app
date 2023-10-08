@@ -1,14 +1,12 @@
 import {
   Box,
   Text,
-  Heading,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useDisclosure,
   Button,
   FormControl,
@@ -17,7 +15,7 @@ import {
   FormHelperText,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import React, { FormEventHandler, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import { FormEvent } from "react";
@@ -28,7 +26,7 @@ import validateToken from "./utils/validateToken";
 import parseJwt from "./utils/parseJWT";
 
 const Login = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onClose } = useDisclosure();
   const [formError, setFormError] = useState("");
   const navigate = useNavigate();
   const location = useLocation().pathname;
@@ -58,11 +56,17 @@ const Login = () => {
       );
       localStorage.setItem("jwt", response.data.token);
       navigate("/home");
-    } catch (error: any) {
-      if (error.response.status === 400) {
-        setFormError(error.response.data.message);
+    } catch (error) {
+      const err = error as AxiosError;
+      if (err.response && err.response.status === 400) {
+        const message = err.response.data as { message: string };
+        if (message && typeof message.message === "string") {
+          setFormError(message.message);
+        } else {
+          setFormError("An unexpected error occurred. Please try again later.");
+        }
       } else {
-        setFormError("Error Logging In");
+        setFormError("An unexpected error occurred. Please try again later.");
       }
     }
   };

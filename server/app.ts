@@ -55,7 +55,6 @@ app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
   res.locals.error = req.app.get("env") === "development" ? err : {};
   // render the error page
   res.status((err as any).status || 500);
-  console.log(err);
   res.json({ message: res.locals.message, success: false });
 });
 

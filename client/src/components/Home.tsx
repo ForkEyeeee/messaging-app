@@ -1,4 +1,4 @@
-import { AbsoluteCenter, Box, Text, VStack, Icon } from "@chakra-ui/react";
+import { AbsoluteCenter, Text, VStack, Icon } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
 
 const Home = () => {

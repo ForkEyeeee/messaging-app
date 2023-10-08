@@ -1,8 +1,11 @@
-import { Box, HStack, Text, VStack, Flex } from "@chakra-ui/react";
+import { HStack, Text, VStack, Flex } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle } from "@fortawesome/fontawesome-free-solid";
+import {
+  faUserCircle,
+  IconDefinition,
+} from "@fortawesome/free-solid-svg-icons";
 const SideBarItem = ({
   children,
   url,
@@ -42,7 +45,7 @@ const SideBarItem = ({
       >
         <VStack justifyContent={"flex-end"}>
           <FontAwesomeIcon
-            icon={faUserCircle as any}
+            icon={faUserCircle as IconDefinition}
             style={{ color: "#808080" }}
             size="3x"
           />

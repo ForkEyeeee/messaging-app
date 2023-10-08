@@ -7,7 +7,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import Message from "../models/message";
 import { Date } from "mongoose";
-import mongoose from "mongoose";
 
 export const getUserProfile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -200,7 +199,7 @@ export const updateUserProfile = [
         );
         const userId: any = (<any>decoded).user._id;
         const updatedUser = await User.findOneAndUpdate(
-          { _id: userId }, //req.params.id
+          { _id: userId },
           { firstname: firstName, lastname: lastName, about, phone },
           { new: true }
         );

@@ -1,7 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 import "@testing-library/jest-dom";
-import Footer from "../components/Footer";
 import Login from "../components/Login";
 import { BrowserRouter } from "react-router-dom";
 

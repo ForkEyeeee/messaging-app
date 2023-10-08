@@ -4,22 +4,17 @@ import {
   VStack,
   Drawer,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  Button,
   Center,
   Text,
   Spinner,
   useDisclosure,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
-import { useEffect } from "react";
 import axios from "axios";
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import SideBarItem from "./SideBarItem";
 import parseJwt from "./utils/parseJWT";

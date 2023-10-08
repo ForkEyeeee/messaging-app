@@ -18,7 +18,10 @@ import Message from "./Message";
 import { FormEvent } from "react";
 import { BsSendFill } from "react-icons/bs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle } from "@fortawesome/fontawesome-free-solid";
+import {
+  faUserCircle,
+  IconDefinition,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface MessageState {
   _id: string;
@@ -71,8 +74,12 @@ const Chat = () => {
         );
         setMessages(response.data.messages);
         setRecipient(response.data.recipient);
-      } catch (error) {
-        console.error(error);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          console.error(error);
+        } else {
+          console.error(error);
+        }
       } finally {
         setLoading(false);
       }
@@ -81,7 +88,7 @@ const Chat = () => {
   }, [token, location]);
 
   return (
-    <Box flex="1" display="flex" flexDirection="column" h="100vh">
+    <Box flex="1" display="flex" flexDirection="column" h="100vh" p={{ xl: 5 }}>
       {loading ? (
         <Center p={10}>
           <Spinner
@@ -96,7 +103,7 @@ const Chat = () => {
         <>
           <HStack justifyContent={"space-between"} p={2}>
             <FontAwesomeIcon
-              icon={faUserCircle as any}
+              icon={faUserCircle as IconDefinition}
               style={{ color: "#808080" }}
               size="2x"
             />

@@ -8,8 +8,4 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 router.post("/signup", authController_1.signUpPost);
 router.post("/login", authController_1.logInPost);
-// router.get("/home", function (req, res) {
-//   res.json({ test: "here" });
-//   // res.redirect("/login");
-// });
 exports.default = router;
