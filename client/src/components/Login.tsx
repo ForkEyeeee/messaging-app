@@ -85,16 +85,20 @@ const Login = () => {
           <ModalBody>
             <form onSubmit={handleSubmit}>
               <FormControl isRequired={true} isInvalid={formError !== ""}>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Username</FormLabel>
                 <Input
-                  type="text"
+                  type="email"
                   name="username"
-                  placeholder="Enter your name"
+                  placeholder="Enter in email format"
                   maxLength={50}
                   required
                 />
               </FormControl>
-              <FormControl isRequired={true} isInvalid={formError !== ""}>
+              <FormControl
+                isRequired={true}
+                isInvalid={formError !== ""}
+                pt={5}
+              >
                 <FormLabel>Password</FormLabel>
                 <Input
                   type="password"

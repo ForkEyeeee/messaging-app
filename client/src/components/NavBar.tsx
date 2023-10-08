@@ -24,11 +24,9 @@ const NavBar = () => {
     <Box data-testid="navbar-container">
       <Box p={5} fontFamily={"inter"} fontSize={{ base: 16, sm: 24 }}>
         <HStack justifyContent="space-between">
-          {!isExpiredUser && !parsedToken && (
-            <ChakraLink as={ReactRouterLink} to={`/home`}>
-              <AiFillHome />
-            </ChakraLink>
-          )}
+          <ChakraLink as={ReactRouterLink} to={`/home`}>
+            <AiFillHome />
+          </ChakraLink>
           {parsedToken === undefined &&
           !isExpiredUser &&
           isExpiredUser === undefined ? (

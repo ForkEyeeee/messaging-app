@@ -83,11 +83,11 @@ const SignUp = () => {
                 mb={3}
                 isInvalid={formError !== ""}
               >
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Username</FormLabel>
                 <Input
-                  type="text"
+                  type="email"
                   name="username"
-                  placeholder="Enter your name"
+                  placeholder="Enter in email format"
                   maxLength={20}
                   required
                 />
